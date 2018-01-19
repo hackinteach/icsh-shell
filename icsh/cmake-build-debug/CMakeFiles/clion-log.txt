@@ -1,0 +1,6 @@
+/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh
+-- Configuring done
+CMake Error: CMake can not determine linker language for target: HEADER_FILES
+CMake Error: Cannot determine link language for target "HEADER_FILES".
+-- Generating done
+-- Build files have been written to: /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-debug

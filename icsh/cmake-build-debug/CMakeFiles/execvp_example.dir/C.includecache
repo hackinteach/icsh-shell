@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/execvp_example.c
+stdio.h
+-
+sys/types.h
+-
+unistd.h
+-
+string.h
+-
+sys/wait.h
+-
+stdlib.h
+-
+
