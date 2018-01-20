@@ -8,9 +8,13 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <stdlib.h>
-#include "misc.h"
 
-int main(int argc, char** argv){
+const int MAX_ARGS = 1024;
+
+static char line[MAX_ARGS];
+
+int main(){
     /* Shell initialization */
+
 }
 

@@ -273,10 +273,10 @@
 		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh.c">
 			<Option target="icsh"/>
 		</Unit>
-		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/misc.h">
+		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/shell.c">
 			<Option target="icsh"/>
 		</Unit>
-		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/shell.c">
+		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/shell.h">
 			<Option target="icsh"/>
 		</Unit>
 		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/CMakeLists.txt">

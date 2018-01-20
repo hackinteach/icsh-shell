@@ -11,17 +11,17 @@
 #define MAX_ARG_LEN     16
 #define WHITESPACE " .,\t\n"
 
-struct command_t {
+typedef struct command_t {
     char* name;
     int argc;
     char *argv[MAX_ARGS];
-};
+} Command;
 
-int parseCommand(char  *line, struct command_t *cmd);
+int parseCommand(char  *line, Command *cmd);
 
 int main(int argc, char **argv) {
     int pid, numChildren, status;
-    struct command_t command;
+    Command command;
     char cmdLine[MAX_LINE_LEN];
     FILE *fid;
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
 
 }
 
-int parseCommand(char *line, struct command_t *cmd){
+int parseCommand(char *line, Command *cmd){
     int argc;
     char **commandLinePtr;
 
