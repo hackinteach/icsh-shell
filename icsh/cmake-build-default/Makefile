@@ -175,36 +175,6 @@ icsh/fast:
 	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/build
 .PHONY : icsh/fast
 
-builtin.o: builtin.c.o
-
-.PHONY : builtin.o
-
-# target to build an object file
-builtin.c.o:
-	$(MAKE) -f CMakeFiles/caller.dir/build.make CMakeFiles/caller.dir/builtin.c.o
-	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/builtin.c.o
-.PHONY : builtin.c.o
-
-builtin.i: builtin.c.i
-
-.PHONY : builtin.i
-
-# target to preprocess a source file
-builtin.c.i:
-	$(MAKE) -f CMakeFiles/caller.dir/build.make CMakeFiles/caller.dir/builtin.c.i
-	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/builtin.c.i
-.PHONY : builtin.c.i
-
-builtin.s: builtin.c.s
-
-.PHONY : builtin.s
-
-# target to generate assembly for a file
-builtin.c.s:
-	$(MAKE) -f CMakeFiles/caller.dir/build.make CMakeFiles/caller.dir/builtin.c.s
-	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/builtin.c.s
-.PHONY : builtin.c.s
-
 examples/exec_caller.o: examples/exec_caller.c.o
 
 .PHONY : examples/exec_caller.o
@@ -340,33 +310,6 @@ icsh.c.s:
 	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/icsh.c.s
 .PHONY : icsh.c.s
 
-shell.o: shell.c.o
-
-.PHONY : shell.o
-
-# target to build an object file
-shell.c.o:
-	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/shell.c.o
-.PHONY : shell.c.o
-
-shell.i: shell.c.i
-
-.PHONY : shell.i
-
-# target to preprocess a source file
-shell.c.i:
-	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/shell.c.i
-.PHONY : shell.c.i
-
-shell.s: shell.c.s
-
-.PHONY : shell.s
-
-# target to generate assembly for a file
-shell.c.s:
-	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/shell.c.s
-.PHONY : shell.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -380,9 +323,6 @@ help:
 	@echo "... execvp_example"
 	@echo "... launch"
 	@echo "... icsh"
-	@echo "... builtin.o"
-	@echo "... builtin.i"
-	@echo "... builtin.s"
 	@echo "... examples/exec_caller.o"
 	@echo "... examples/exec_caller.i"
 	@echo "... examples/exec_caller.s"
@@ -398,9 +338,6 @@ help:
 	@echo "... icsh.o"
 	@echo "... icsh.i"
 	@echo "... icsh.s"
-	@echo "... shell.o"
-	@echo "... shell.i"
-	@echo "... shell.s"
 .PHONY : help
 
 
