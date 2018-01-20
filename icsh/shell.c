@@ -1,16 +1,15 @@
 //
 // Created by Hackinteach K. on 20/1/2018 AD.
 //
-
-#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <signal.h>
 #include <stdio.h>
 #include <errno.h>
-#include <tclDecls.h>
+#include <termios.h>
+#include <stdlib.h>
+#include "builtin.c"
 #include "shell.h"
-#include "builtin.h"
 
 void init_shell() {
 
@@ -253,7 +252,7 @@ void format_job_info(job *j, const char *status) {
 
 void do_job_notification(void) {
     job *j, *jlast, *jnext;
-    process *p;
+//    process *p;
 
     /* Update status information for child processes.  */
     update_status();
@@ -337,7 +336,8 @@ int builtin_exec(char **args){
         }
     }
 
-    return 0;
+    /* built-in command not found*/
+    return -1;
 }
 
 void prompt(){

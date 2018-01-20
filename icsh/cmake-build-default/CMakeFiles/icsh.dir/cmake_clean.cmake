@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/icsh.dir/icsh.c.o"
-  "CMakeFiles/icsh.dir/shell.c.o"
   "CMakeFiles/icsh.dir/builtin.c.o"
+  "CMakeFiles/icsh.dir/shell.c.o"
+  "CMakeFiles/icsh.dir/icsh.c.o"
   "icsh.pdb"
   "icsh"
 )

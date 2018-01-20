@@ -57,28 +57,28 @@ include CMakeFiles/icsh.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/icsh.dir/flags.make
 
-CMakeFiles/icsh.dir/icsh.c.o: CMakeFiles/icsh.dir/flags.make
-CMakeFiles/icsh.dir/icsh.c.o: ../icsh.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/icsh.dir/icsh.c.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/icsh.dir/icsh.c.o   -c /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh.c
+CMakeFiles/icsh.dir/builtin.c.o: CMakeFiles/icsh.dir/flags.make
+CMakeFiles/icsh.dir/builtin.c.o: ../builtin.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/icsh.dir/builtin.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/icsh.dir/builtin.c.o   -c /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c
 
-CMakeFiles/icsh.dir/icsh.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/icsh.dir/icsh.c.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh.c > CMakeFiles/icsh.dir/icsh.c.i
+CMakeFiles/icsh.dir/builtin.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/icsh.dir/builtin.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c > CMakeFiles/icsh.dir/builtin.c.i
 
-CMakeFiles/icsh.dir/icsh.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/icsh.dir/icsh.c.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh.c -o CMakeFiles/icsh.dir/icsh.c.s
+CMakeFiles/icsh.dir/builtin.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/icsh.dir/builtin.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c -o CMakeFiles/icsh.dir/builtin.c.s
 
-CMakeFiles/icsh.dir/icsh.c.o.requires:
+CMakeFiles/icsh.dir/builtin.c.o.requires:
 
-.PHONY : CMakeFiles/icsh.dir/icsh.c.o.requires
+.PHONY : CMakeFiles/icsh.dir/builtin.c.o.requires
 
-CMakeFiles/icsh.dir/icsh.c.o.provides: CMakeFiles/icsh.dir/icsh.c.o.requires
-	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/icsh.c.o.provides.build
-.PHONY : CMakeFiles/icsh.dir/icsh.c.o.provides
+CMakeFiles/icsh.dir/builtin.c.o.provides: CMakeFiles/icsh.dir/builtin.c.o.requires
+	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/builtin.c.o.provides.build
+.PHONY : CMakeFiles/icsh.dir/builtin.c.o.provides
 
-CMakeFiles/icsh.dir/icsh.c.o.provides.build: CMakeFiles/icsh.dir/icsh.c.o
+CMakeFiles/icsh.dir/builtin.c.o.provides.build: CMakeFiles/icsh.dir/builtin.c.o
 
 
 CMakeFiles/icsh.dir/shell.c.o: CMakeFiles/icsh.dir/flags.make
@@ -105,42 +105,42 @@ CMakeFiles/icsh.dir/shell.c.o.provides: CMakeFiles/icsh.dir/shell.c.o.requires
 CMakeFiles/icsh.dir/shell.c.o.provides.build: CMakeFiles/icsh.dir/shell.c.o
 
 
-CMakeFiles/icsh.dir/builtin.c.o: CMakeFiles/icsh.dir/flags.make
-CMakeFiles/icsh.dir/builtin.c.o: ../builtin.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/icsh.dir/builtin.c.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/icsh.dir/builtin.c.o   -c /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c
+CMakeFiles/icsh.dir/icsh.c.o: CMakeFiles/icsh.dir/flags.make
+CMakeFiles/icsh.dir/icsh.c.o: ../icsh.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/icsh.dir/icsh.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/icsh.dir/icsh.c.o   -c /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh.c
 
-CMakeFiles/icsh.dir/builtin.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/icsh.dir/builtin.c.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c > CMakeFiles/icsh.dir/builtin.c.i
+CMakeFiles/icsh.dir/icsh.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/icsh.dir/icsh.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh.c > CMakeFiles/icsh.dir/icsh.c.i
 
-CMakeFiles/icsh.dir/builtin.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/icsh.dir/builtin.c.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c -o CMakeFiles/icsh.dir/builtin.c.s
+CMakeFiles/icsh.dir/icsh.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/icsh.dir/icsh.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh.c -o CMakeFiles/icsh.dir/icsh.c.s
 
-CMakeFiles/icsh.dir/builtin.c.o.requires:
+CMakeFiles/icsh.dir/icsh.c.o.requires:
 
-.PHONY : CMakeFiles/icsh.dir/builtin.c.o.requires
+.PHONY : CMakeFiles/icsh.dir/icsh.c.o.requires
 
-CMakeFiles/icsh.dir/builtin.c.o.provides: CMakeFiles/icsh.dir/builtin.c.o.requires
-	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/builtin.c.o.provides.build
-.PHONY : CMakeFiles/icsh.dir/builtin.c.o.provides
+CMakeFiles/icsh.dir/icsh.c.o.provides: CMakeFiles/icsh.dir/icsh.c.o.requires
+	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/icsh.c.o.provides.build
+.PHONY : CMakeFiles/icsh.dir/icsh.c.o.provides
 
-CMakeFiles/icsh.dir/builtin.c.o.provides.build: CMakeFiles/icsh.dir/builtin.c.o
+CMakeFiles/icsh.dir/icsh.c.o.provides.build: CMakeFiles/icsh.dir/icsh.c.o
 
 
 # Object files for target icsh
 icsh_OBJECTS = \
-"CMakeFiles/icsh.dir/icsh.c.o" \
+"CMakeFiles/icsh.dir/builtin.c.o" \
 "CMakeFiles/icsh.dir/shell.c.o" \
-"CMakeFiles/icsh.dir/builtin.c.o"
+"CMakeFiles/icsh.dir/icsh.c.o"
 
 # External object files for target icsh
 icsh_EXTERNAL_OBJECTS =
 
-icsh: CMakeFiles/icsh.dir/icsh.c.o
-icsh: CMakeFiles/icsh.dir/shell.c.o
 icsh: CMakeFiles/icsh.dir/builtin.c.o
+icsh: CMakeFiles/icsh.dir/shell.c.o
+icsh: CMakeFiles/icsh.dir/icsh.c.o
 icsh: CMakeFiles/icsh.dir/build.make
 icsh: CMakeFiles/icsh.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable icsh"
@@ -151,9 +151,9 @@ CMakeFiles/icsh.dir/build: icsh
 
 .PHONY : CMakeFiles/icsh.dir/build
 
-CMakeFiles/icsh.dir/requires: CMakeFiles/icsh.dir/icsh.c.o.requires
-CMakeFiles/icsh.dir/requires: CMakeFiles/icsh.dir/shell.c.o.requires
 CMakeFiles/icsh.dir/requires: CMakeFiles/icsh.dir/builtin.c.o.requires
+CMakeFiles/icsh.dir/requires: CMakeFiles/icsh.dir/shell.c.o.requires
+CMakeFiles/icsh.dir/requires: CMakeFiles/icsh.dir/icsh.c.o.requires
 
 .PHONY : CMakeFiles/icsh.dir/requires
 

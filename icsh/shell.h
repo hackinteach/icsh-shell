@@ -2,10 +2,13 @@
 // Created by Hackinteach K. on 20/1/2018 AD.
 //
 
+#ifndef _SHELLH_
+#define _SHELLH_
 
 #include <ntsid.h>
 #include <stddef.h>
 #include <termios.h>
+#include "builtin.h"
 
 #define MAX_LINE_LEN    80
 #define MAX_ARGS    64
@@ -32,7 +35,7 @@ typedef struct process {
 typedef struct job {
     struct job *next;           /* next active job */
 //    char *command;              /* command line, used for messages */
-    char* infile, outfile;      /* file redirection */
+    char *infile, *outfile;      /* file redirection */
     process *first_process;     /* list of processes in this job */
     pid_t pgid;                 /* process group ID */
     char notified;              /* true if user told about stopped job */
@@ -113,3 +116,5 @@ int builtin_exec(char **args);
 
 /* icsh prompt */
 void prompt();
+
+#endif

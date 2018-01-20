@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 
 set(SOURCE_FILES icsh.c)
 
-add_executable(icsh icsh.c shell.c shell.h builtin.c builtin.h)
+add_executable(icsh builtin.h shell.h builtin.c shell.c icsh.c)
 
 # Example stuff.
 add_executable(execvp_example ./examples/execvp_example.c)

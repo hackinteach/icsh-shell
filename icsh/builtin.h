@@ -1,9 +1,11 @@
 //
 // Created by Hackinteach K. on 20/1/2018 AD.
 //
+#ifndef _BUILTINH_
+#define _BUILTINH_
 
 #include <stdlib.h>
-#include "shell.h"
+#include "shell.c"
 
 /* FUNCTION DECLARATION */
 int bif_exit(char **args);
@@ -39,5 +41,6 @@ int num_builtin(){
     return sizeof(builtin_str) / sizeof(char *);
 }
 
+#endif
 
 
