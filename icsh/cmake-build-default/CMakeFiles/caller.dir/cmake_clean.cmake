@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/caller.dir/examples/exec_caller.c.o"
+  "CMakeFiles/caller.dir/examples/builtin.c.o"
   "caller.pdb"
   "caller"
 )

@@ -7,6 +7,11 @@
 #include <stddef.h>
 #include <termios.h>
 
+#define MAX_LINE_LEN    80
+#define MAX_ARGS    64
+#define MAX_ARG_LEN     16
+#define WHITESPACE " .,\t\n"
+
 /* Shell's attributes */
 pid_t shell_pgid;
 struct termios shell_tmodes;
@@ -34,12 +39,13 @@ typedef struct job {
     int stdin, stdout, stderr;  /* standard i/o channels */
 } job;
 
-/* The active jobs are linked into a list.  This is its head.   *//*
-
+/* The active jobs are linked into a list.  This is its head.   */
 job *first_job = NULL;
-*/
 
 /* List of all functions to be used later */
+
+/* Parse the command line to process */
+int parse_command(char *line, process *cmd);
 
 /* Find the active job with the indicated pgid */
 job *find_job(pid_t pgid);
@@ -48,15 +54,15 @@ job *find_job(pid_t pgid);
 int job_is_stopped(job *j);
 
 /* Return true if all processes in the job have completed */
-int job_is_complete(job *j);
+int job_is_completed(job *j);
 
 /* Initialize shell */
 void init_shell();
 
-
 /* Launch process */
 void launch_process(process *p, pid_t pgid,
-                    int infile, int outfile, int errfile);
+                    int infile, int outfile,
+                    int errfile, int foreground);
 
 /* Launch job */
 void launch_job(job *j, int foreground);
@@ -93,3 +99,16 @@ void do_job_notification(void);
 /* Mark a stopped job J as being running again */
 void mark_job_as_running(job *j);
 
+/* Continue the job J */
+void continue_job(job *j, int foreground);
+
+/* Clean up */
+void free_process(process *p);
+
+void free_job(job *j);
+
+/* Search for built-in command first */
+int builtin_exec(char **args);
+
+/* icsh prompt */
+void prompt();

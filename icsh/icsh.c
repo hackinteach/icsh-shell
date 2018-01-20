@@ -8,13 +8,16 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <stdlib.h>
+#include "shell.h"
+#include "shell.c"
 
-const int MAX_ARGS = 1024;
 
-static char line[MAX_ARGS];
 
 int main(){
     /* Shell initialization */
+    init_shell();
+    while(1){
+        prompt();
 
+    }
 }
-

@@ -175,6 +175,33 @@ icsh/fast:
 	$(MAKE) -f CMakeFiles/icsh.dir/build.make CMakeFiles/icsh.dir/build
 .PHONY : icsh/fast
 
+examples/builtin.o: examples/builtin.c.o
+
+.PHONY : examples/builtin.o
+
+# target to build an object file
+examples/builtin.c.o:
+	$(MAKE) -f CMakeFiles/caller.dir/build.make CMakeFiles/caller.dir/examples/builtin.c.o
+.PHONY : examples/builtin.c.o
+
+examples/builtin.i: examples/builtin.c.i
+
+.PHONY : examples/builtin.i
+
+# target to preprocess a source file
+examples/builtin.c.i:
+	$(MAKE) -f CMakeFiles/caller.dir/build.make CMakeFiles/caller.dir/examples/builtin.c.i
+.PHONY : examples/builtin.c.i
+
+examples/builtin.s: examples/builtin.c.s
+
+.PHONY : examples/builtin.s
+
+# target to generate assembly for a file
+examples/builtin.c.s:
+	$(MAKE) -f CMakeFiles/caller.dir/build.make CMakeFiles/caller.dir/examples/builtin.c.s
+.PHONY : examples/builtin.c.s
+
 examples/exec_caller.o: examples/exec_caller.c.o
 
 .PHONY : examples/exec_caller.o
@@ -350,6 +377,9 @@ help:
 	@echo "... execvp_example"
 	@echo "... launch"
 	@echo "... icsh"
+	@echo "... examples/builtin.o"
+	@echo "... examples/builtin.i"
+	@echo "... examples/builtin.s"
 	@echo "... examples/exec_caller.o"
 	@echo "... examples/exec_caller.i"
 	@echo "... examples/exec_caller.s"

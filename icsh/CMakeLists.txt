@@ -9,6 +9,6 @@ add_executable(icsh icsh.c shell.c shell.h)
 
 # Example stuff.
 add_executable(execvp_example ./examples/execvp_example.c)
-add_executable(caller ./examples/exec_caller.c )
+add_executable(caller ./examples/exec_caller.c examples/builtin.c examples/builtin.h)
 add_executable(fork_example ./examples/fork_example.c)
 add_executable(launch ./examples/launch.c)
