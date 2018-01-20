@@ -3,11 +3,12 @@
 //
 
 #include <stdlib.h>
+#include "shell.h"
 
 /* FUNCTION DECLARATION */
 int bif_exit(char **args);
 /* bif -- built-in function */
-int bif_jobs(char **args);
+int bif_jobs(job *j);
 int bif_echo(char **args);
 int bif_fg(char **args);
 int bif_bg(char **args);

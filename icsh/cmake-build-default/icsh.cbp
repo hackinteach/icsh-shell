@@ -258,11 +258,13 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/examples/builtin.c">
+		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c">
 			<Option target="caller"/>
+			<Option target="icsh"/>
 		</Unit>
-		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/examples/builtin.h">
+		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.h">
 			<Option target="caller"/>
+			<Option target="icsh"/>
 		</Unit>
 		<Unit filename="/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/examples/exec_caller.c">
 			<Option target="caller"/>

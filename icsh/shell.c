@@ -8,8 +8,9 @@
 #include <signal.h>
 #include <stdio.h>
 #include <errno.h>
+#include <tclDecls.h>
 #include "shell.h"
-#include "examples/builtin.h"
+#include "builtin.h"
 
 void init_shell() {
 
@@ -45,19 +46,24 @@ void init_shell() {
     }
 }
 
-int parse_command(char *line, process *cmd) {
+int parse_command(char *line, process *p, job *j) {
     int argc;
     char **commandLinePtr;
 
+    j->first_process = p;
     /* Initialize */
     commandLinePtr = &line;
     argc = 0;
-    cmd->argv[argc] = (char *) malloc(MAX_ARG_LEN);
+    p->argv[argc] = (char *) malloc(MAX_ARG_LEN);
 
     /* Fill argv[] */
-    while ((cmd->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
-        cmd->argv[++argc] = (char *) malloc(MAX_ARG_LEN);
+    while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
+        p->argv[++argc] = (char *) malloc(MAX_ARG_LEN);
     }
+
+    /* Set job command */
+//    j->command = (char*)malloc(sizeof(p->argv[0]));
+//    strcpy(j->command,p->argv[0]);
 
     return 1;
 }
@@ -242,7 +248,7 @@ void wait_for_job(job *j) {
 }
 
 void format_job_info(job *j, const char *status) {
-    fprintf(stderr, "%ld (%s): %s\n", (long) j->pgid, status, j->command);
+    fprintf(stderr, "%ld (%s): %s\n", (long) j->pgid, status, j->first_process->argv[0]);
 }
 
 void do_job_notification(void) {
@@ -315,6 +321,8 @@ void free_job(job *j) {
         free_process(p);
         p = tmp;
     }
+    free(j->infile);
+    free(j->outfile);
 }
 
 int builtin_exec(char **args){

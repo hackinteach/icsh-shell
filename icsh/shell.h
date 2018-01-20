@@ -31,7 +31,8 @@ typedef struct process {
 /* A job is a pipeline of processes.  */
 typedef struct job {
     struct job *next;           /* next active job */
-    char *command;              /* command line, used for messages */
+//    char *command;              /* command line, used for messages */
+    char* infile, outfile;      /* file redirection */
     process *first_process;     /* list of processes in this job */
     pid_t pgid;                 /* process group ID */
     char notified;              /* true if user told about stopped job */
@@ -45,7 +46,7 @@ job *first_job = NULL;
 /* List of all functions to be used later */
 
 /* Parse the command line to process */
-int parse_command(char *line, process *cmd);
+int parse_command(char *line, process *p, job *j);
 
 /* Find the active job with the indicated pgid */
 job *find_job(pid_t pgid);

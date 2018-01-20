@@ -81,40 +81,40 @@ CMakeFiles/caller.dir/examples/exec_caller.c.o.provides: CMakeFiles/caller.dir/e
 CMakeFiles/caller.dir/examples/exec_caller.c.o.provides.build: CMakeFiles/caller.dir/examples/exec_caller.c.o
 
 
-CMakeFiles/caller.dir/examples/builtin.c.o: CMakeFiles/caller.dir/flags.make
-CMakeFiles/caller.dir/examples/builtin.c.o: ../examples/builtin.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/caller.dir/examples/builtin.c.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/caller.dir/examples/builtin.c.o   -c /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/examples/builtin.c
+CMakeFiles/caller.dir/builtin.c.o: CMakeFiles/caller.dir/flags.make
+CMakeFiles/caller.dir/builtin.c.o: ../builtin.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/caller.dir/builtin.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/caller.dir/builtin.c.o   -c /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c
 
-CMakeFiles/caller.dir/examples/builtin.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/caller.dir/examples/builtin.c.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/examples/builtin.c > CMakeFiles/caller.dir/examples/builtin.c.i
+CMakeFiles/caller.dir/builtin.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/caller.dir/builtin.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c > CMakeFiles/caller.dir/builtin.c.i
 
-CMakeFiles/caller.dir/examples/builtin.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/caller.dir/examples/builtin.c.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/examples/builtin.c -o CMakeFiles/caller.dir/examples/builtin.c.s
+CMakeFiles/caller.dir/builtin.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/caller.dir/builtin.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/builtin.c -o CMakeFiles/caller.dir/builtin.c.s
 
-CMakeFiles/caller.dir/examples/builtin.c.o.requires:
+CMakeFiles/caller.dir/builtin.c.o.requires:
 
-.PHONY : CMakeFiles/caller.dir/examples/builtin.c.o.requires
+.PHONY : CMakeFiles/caller.dir/builtin.c.o.requires
 
-CMakeFiles/caller.dir/examples/builtin.c.o.provides: CMakeFiles/caller.dir/examples/builtin.c.o.requires
-	$(MAKE) -f CMakeFiles/caller.dir/build.make CMakeFiles/caller.dir/examples/builtin.c.o.provides.build
-.PHONY : CMakeFiles/caller.dir/examples/builtin.c.o.provides
+CMakeFiles/caller.dir/builtin.c.o.provides: CMakeFiles/caller.dir/builtin.c.o.requires
+	$(MAKE) -f CMakeFiles/caller.dir/build.make CMakeFiles/caller.dir/builtin.c.o.provides.build
+.PHONY : CMakeFiles/caller.dir/builtin.c.o.provides
 
-CMakeFiles/caller.dir/examples/builtin.c.o.provides.build: CMakeFiles/caller.dir/examples/builtin.c.o
+CMakeFiles/caller.dir/builtin.c.o.provides.build: CMakeFiles/caller.dir/builtin.c.o
 
 
 # Object files for target caller
 caller_OBJECTS = \
 "CMakeFiles/caller.dir/examples/exec_caller.c.o" \
-"CMakeFiles/caller.dir/examples/builtin.c.o"
+"CMakeFiles/caller.dir/builtin.c.o"
 
 # External object files for target caller
 caller_EXTERNAL_OBJECTS =
 
 caller: CMakeFiles/caller.dir/examples/exec_caller.c.o
-caller: CMakeFiles/caller.dir/examples/builtin.c.o
+caller: CMakeFiles/caller.dir/builtin.c.o
 caller: CMakeFiles/caller.dir/build.make
 caller: CMakeFiles/caller.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable caller"
@@ -126,7 +126,7 @@ CMakeFiles/caller.dir/build: caller
 .PHONY : CMakeFiles/caller.dir/build
 
 CMakeFiles/caller.dir/requires: CMakeFiles/caller.dir/examples/exec_caller.c.o.requires
-CMakeFiles/caller.dir/requires: CMakeFiles/caller.dir/examples/builtin.c.o.requires
+CMakeFiles/caller.dir/requires: CMakeFiles/caller.dir/builtin.c.o.requires
 
 .PHONY : CMakeFiles/caller.dir/requires
 
