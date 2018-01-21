@@ -44,7 +44,9 @@ int main(){
         }
         printf("Launching job: %d\n",j->id);
         launch_job(j,foreground,&id);
+        printf("job launched\n");
         do_job_notification();
+        printf("notif done\n");
     }
 }
 

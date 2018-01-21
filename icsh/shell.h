@@ -27,6 +27,7 @@
 typedef struct process {
     struct process *next;       /* next process in pipeline */
     char **argv;                /* for exec */
+    int argc;                   /* counting argv */
     pid_t pid;                  /* process ID */
     char completed;             /* true if process has completed */
     char stopped;               /* true if process has stopped */
@@ -103,15 +104,19 @@ int parse_command(char *line, job *j) {
     commandLinePtr = &line;
     argc = 0;
     p->argv = (char**)malloc(sizeof(char*)*MAX_ARGS);
+
     p->argv[argc] = (char*)malloc(MAX_ARG_LEN);
+
     /* Fill argv[] */
     printf("Filling argv\n");
-    while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
-        p->argv[++argc] = (char *) malloc(MAX_ARG_LEN);
+    while ((p->argv[argc++] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
+        p->argv[argc] = (char *) malloc(MAX_ARG_LEN);
     }
 
+    p->argc = argc;
     printf("[parse_command] p->argv[0]: %s\n", p->argv[0]);
-    printf("[parse_command] j->p->argv[0]: %s\n", j->first_process->argv[0]);
+    printf("[parse_command] j->p->argv[1]: %s\n", j->first_process->argv[1]);
+    free(p->argv[1]);
 
     return 0;
 }
@@ -370,6 +375,7 @@ process *create_process(void) {
     }
     p->next = NULL;
     p->argv = NULL;
+    p->argc = 0;
     p->completed = 0;
     p->stopped = 0;
     return p;
@@ -386,10 +392,14 @@ void update_status(void) {
 
 void free_process(process *p) {
     if (!p->argv) return;
-    for (int i = 0; p->argv[i] && i < MAX_ARGS; ++i) {
+    for (int i = 0; p->argv[i] && i < p->argc; i++) {
+        printf("%d\n",i);
         free(p->argv[i]);
     }
+
+    printf("freeing argv\n");
     free(p->argv);
+    printf("freed argv\n");
 }
 
 void free_job(job *j) {
@@ -398,10 +408,11 @@ void free_job(job *j) {
     while (p) {
         process *tmp = p->next;
         free_process(p);
+        printf("done free process\n");
         p = tmp;
     }
-    free(j->infile);
-    free(j->outfile);
+//    free(j->infile);
+//    free(j->outfile);
 }
 
 job *find_job(pid_t pgid) {
@@ -429,21 +440,21 @@ void do_job_notification(void) {
 
     /* Update status information for child processes.  */
     update_status();
-
     jlast = NULL;
     for (j = first_job; j; j = jnext) {
         jnext = j->next;
-
         /* If all processes have completed, tell the user the job has
            completed and delete it from the list of active jobs.  */
         if (job_is_completed(j)) {
             format_job_info(j, "completed");
             if (jlast) {
+                printf("LAST\n");
                 jlast->next = jnext;
             } else {
+                printf("SET FIRST\n");
                 first_job = jnext;
             }
-//            free_job(j);
+            free_job(j);
         }
 
             /* Notify the user about stopped jobs,
