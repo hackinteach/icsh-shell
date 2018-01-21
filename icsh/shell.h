@@ -44,15 +44,14 @@ typedef struct job {
     struct termios tmodes;      /* saved terminal modes */
     int stdin, stdout, stderr;  /* standard i/o channels */
     int id;
-    int valid;
 } job;
 
 /* Shell's attributes */
-extern pid_t shell_pgid;
-extern struct termios shell_tmodes;
-extern int shell_terminal;
-extern int shell_is_interactive;
-extern job *first_job;
+pid_t shell_pgid;
+struct termios shell_tmodes;
+int shell_terminal;
+int shell_is_interactive;
+job *first_job;
 
 /* List of all functions to be used later */
 void init_shell() {
@@ -89,17 +88,24 @@ void init_shell() {
     }
 }
 
-int parse_command(char *line, process *p, job *j) {
+process* create_process(void);
+
+int parse_command(char *line, job *j) {
     int argc;
     char **commandLinePtr;
+    process *p = create_process();
 
     j->first_process = p;
+
+    printf("Set first_process done\n");
+
     /* Initialize */
     commandLinePtr = &line;
     argc = 0;
-    p->argv[argc] = (char *) malloc(sizeof(char) * MAX_ARG_LEN);
-
+    p->argv = (char**)malloc(sizeof(char*)*MAX_ARGS);
+    p->argv[argc] = (char*)malloc(MAX_ARG_LEN);
     /* Fill argv[] */
+    printf("Filling argv\n");
     while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
         p->argv[++argc] = (char *) malloc(MAX_ARG_LEN);
     }
@@ -107,7 +113,7 @@ int parse_command(char *line, process *p, job *j) {
     printf("[parse_command] p->argv[0]: %s\n", p->argv[0]);
     printf("[parse_command] j->p->argv[0]: %s\n", j->first_process->argv[0]);
 
-    return 1;
+    return 0;
 }
 
 void launch_process(process *p, pid_t pgid,
@@ -155,6 +161,83 @@ void launch_process(process *p, pid_t pgid,
 }
 
 int launch_builtin(process *p,int infile, int outfile, int errfile);
+void format_job_info(job *j,const char* status);
+void wait_for_job(job* j);
+void put_job_in_background(job* j, int cont);
+void put_job_in_foreground(job* j, int cont);
+
+void launch_job (job *j, int foreground, int *id) {
+    process *p;
+    pid_t pid;
+    int mypipe[2], infile, outfile;
+    if (j->infile) {
+        j->stdin = open(j->infile, O_RDONLY);
+        if (j->stdin < 0) {
+            perror(j->infile);
+            exit(1);
+        }
+    }
+    if (j->outfile) {
+        j->stdout = open(j->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+        if (j->stdout < 0) {
+            perror(j->outfile);
+            exit(1);
+        }
+    }
+    infile = j->stdin;
+    for (p = j->first_process; p; p = p->next) {
+        /* Set up pipes, if necessary.  */
+        if (p->next) {
+            if (pipe(mypipe) < 0) {
+                perror("pipe");
+                exit(1);
+            }
+            outfile = mypipe[1];
+        } else
+            outfile = j->stdout;
+        if (launch_builtin(p, infile, outfile, j->stderr) == 0) {
+            p->completed = 1;
+        } else {
+            /* Fork the child processes.  */
+            pid = fork();
+            if (pid == 0)
+                /* This is the child process.  */
+                launch_process(p, j->pgid, infile,
+                               outfile, j->stderr, foreground);
+            else if (pid < 0) {
+                /* The fork failed.  */
+                perror("fork");
+                exit(1);
+            } else {
+                /* This is the parent process.  */
+                p->pid = pid;
+                if (shell_is_interactive) {
+                    if (!j->pgid) {
+                        j->pgid = pid;
+                        j->id = *id;
+                        *id = *id + 1;
+                    }
+                    setpgid(pid, j->pgid);
+                }
+            }
+        }
+        /* Clean up after pipes.  */
+        if (infile != j->stdin)
+            close(infile);
+        if (outfile != j->stdout)
+            close(outfile);
+        infile = mypipe[0];
+    }
+
+    if (!shell_is_interactive)
+        wait_for_job(j);
+    else if (foreground)
+        put_job_in_foreground(j, 0);
+    else {
+        put_job_in_background(j, 0);
+        format_job_info(j, "background");
+    }
+}
 
 void put_job_in_foreground(job *j, int cont) {
     /* Put the job into the foreground.  */
@@ -191,7 +274,9 @@ void format_job_info(job *j, const char *status) {
     fprintf(stderr, "%ld (%s): %s\n", (long) j->pgid, status, j->first_process->argv[0]);
 }
 
-void wait_for_job(job *j) {
+int job_is_stopped(job *j);
+
+        void wait_for_job(job *j) {
     int status;
     pid_t pid;
 
@@ -205,76 +290,7 @@ void wait_for_job(job *j) {
     }
 }
 
-void launch_job(job *j, int foreground) {
-    process *p;
-    pid_t pid;
-    int mypipe[2], infile, outfile;
-    if (j->infile) {
-        j->stdin = open(j->infile, O_RDONLY);
-        if (j->stdin < 0) {
-            perror(j->infile);
-            exit(1);
-        }
-    }
-    if (j->outfile) {
-        j->stdout = open(j->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-        if (j->stdout < 0) {
-            perror(j->outfile);
-            exit(1);
-        }
-    }
-    infile = j->stdin;
-    for (p = j->first_process; p; p = p->next) {
-        /* Set up pipes, if necessary.  */
-        if (p->next) {
-            if (pipe(mypipe) < 0) {
-                perror("pipe");
-                exit(1);
-            }
-            outfile = mypipe[1];
-        } else
-            outfile = j->stdout;
-        if (launch_builtin(p, infile, outfile, j->stderr)) {
-            p->completed = 1;
-        } else {
-            /* Fork the child processes.  */
-            pid = fork();
-            if (pid == 0)
-                /* This is the child process.  */
-                launch_process(p, j->pgid, infile,
-                               outfile, j->stderr, foreground);
-            else if (pid < 0) {
-                /* The fork failed.  */
-                perror("fork");
-                exit(1);
-            } else {
-                /* This is the parent process.  */
-                p->pid = pid;
-                if (shell_is_interactive) {
-                    if (!j->pgid) {
-                        j->pgid = pid;
-                    }
-                    setpgid(pid, j->pgid);
-                }
-            }
-        }
-        /* Clean up after pipes.  */
-        if (infile != j->stdin)
-            close(infile);
-        if (outfile != j->stdout)
-            close(outfile);
-        infile = mypipe[0];
-    }
 
-    if (!shell_is_interactive)
-        wait_for_job(j);
-    else if (foreground)
-        put_job_in_foreground(j, 0);
-    else {
-        put_job_in_background(j, 0);
-        format_job_info(j, "background");
-    }
-}
 
 int mark_process_status(pid_t pid, int status) {
     job *j;
@@ -427,7 +443,7 @@ void do_job_notification(void) {
             } else {
                 first_job = jnext;
             }
-            free_job(j);
+//            free_job(j);
         }
 
             /* Notify the user about stopped jobs,
@@ -686,6 +702,5 @@ int launch_builtin(process *p, int infile, int outfile, int errfile){
     /* built-in not found */
     return -1;
 }
-
 
 #endif

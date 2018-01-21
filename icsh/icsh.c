@@ -4,40 +4,47 @@
 
 #include <stdio.h>
 #include "shell.h"
-#include "builtin.h"
 
 static char *cmd_line;
+job *first_job = NULL;
 //static char cmd_line[MAX_ARG_LEN];
 
 int main(){
     /* Shell initialization */
     init_shell();
+    int  id = 1;
     while(1){
-        job *j = create_job();
-        cmd_line = (char*) malloc(sizeof(char)*MAX_ARG_LEN);
-
         prompt();
 
+        job *j = create_job();
+
+        cmd_line = (char*) malloc(sizeof(char)*MAX_ARG_LEN);
+
         //@TODO : Add checking for & for background later.
-        int foreground = 0;
+        int foreground = (strchr(cmd_line,'&')==NULL);
 
         fgets(cmd_line,MAX_ARG_LEN,stdin);
-        /*Debugging*/
-        printf("[main] Passed read cmd_line\n");
-
         strtok(cmd_line,"\n");
         printf("%s\n",cmd_line);
-        int checkBuiltIn = builtin_exec(cmd_line,j);
 
-        if(checkBuiltIn != 0){
-            printf("file exec\n");
-            parse_command(cmd_line,j);
-            printf("[main] Passed parse_command\n");
-            printf("[main] p->argv[0]: %s\n",j->first_process->argv[0]);
-
-            launch_job(&j,foreground);
-            do_job_notification();
+        /*parse_command*/
+        // @TODO Parse command
+        parse_command(cmd_line,j);
+        printf("%ld\n",j->first_process);
+        /*start the job*/
+        if(first_job){
+            printf("First job\n");
+            job *t;
+            for(t = first_job; t->next;t=t->next){
+                t->next = j;
+            }
+        } else{
+            printf("else\n");
+            first_job = j;
         }
+        printf("Launching job: %d\n",j->id);
+        launch_job(j,foreground,&id);
+        do_job_notification();
     }
 }
 
