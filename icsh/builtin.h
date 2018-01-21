@@ -24,6 +24,7 @@ int bif_jobs(char **args, job *j);
 int bif_echo(char **args, job *j);
 int bif_fg(char **args, job *j);
 int bif_bg(char **args, job *j);
+command cmd;
 
 /*
  * List of built-in commands
@@ -68,6 +69,11 @@ void print_process(process *p) {
 
 int bif_jobs(char **args, job *j) {
 
+//    if(!j){
+//        printf("No job to be printed\n");
+//        return 0;
+//    }
+//
     if (!j->pgid) {
         fprintf(stderr, "parsing failed");
     }
@@ -91,7 +97,11 @@ int bif_jobs(char **args, job *j) {
 }
 
 int bif_echo(char **args, job *j) {
-    //@TODO Implement this
+    if(cmd.argc == 0){
+        printf("Usage: echo <string>\n");
+        return 0;
+    }
+    printf("%s\n",args[1]);
     return 0;
 }
 
@@ -156,23 +166,20 @@ void parse_builtin(char *line, command *cmd){
 
 int builtin_exec(char *line, job *j){
 
-    command cmd;
-
     parse_builtin(line,&cmd);
-    cmd.argv[cmd.argc] = NULL;
 
     printf("TEST COMMAND: %s \n",cmd.argv[0]);
 
     if(cmd.argv[0] == NULL){
-        printf("NULLED\n");
+//        printf("NULLED\n");
         return -1;
     }
 
-    printf("[builtin.h] Passed NULL check\n");
-    printf("[builtin.h] num builtin = %d\n",5);
+//    printf("[builtin.h] Passed NULL check\n");
+//    printf("[builtin.h] num builtin = %d\n",5);
 
     for(int i=0;i<num_builtin();i++){
-        printf("[builtin.h] comparing %s : %s\n i=%d\n",cmd.argv[0],builtin_str[i],i);
+//        printf("[builtin.h] comparing %s : %s\n i=%d\n",cmd.argv[0],builtin_str[i],i);
         if(strcmp(cmd.argv[0], builtin_str[i]) == 0){
             return (*builtin_func[i])(cmd.argv,j);
         }

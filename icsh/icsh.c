@@ -13,8 +13,8 @@ int main(){
     /* Shell initialization */
     init_shell();
     while(1){
-        job *j = (job*)malloc(sizeof(job));
-        process *p = (process*)malloc(sizeof(process));
+        job *j = NULL;
+        process *p = NULL;
         cmd_line = (char*) malloc(sizeof(char)*MAX_ARG_LEN);
 
         prompt();
