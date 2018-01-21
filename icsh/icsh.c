@@ -13,8 +13,7 @@ int main(){
     /* Shell initialization */
     init_shell();
     while(1){
-        job *j = NULL;
-        process *p = NULL;
+        job *j = create_job();
         cmd_line = (char*) malloc(sizeof(char)*MAX_ARG_LEN);
 
         prompt();
@@ -32,8 +31,7 @@ int main(){
 
         if(checkBuiltIn != 0){
             printf("file exec\n");
-
-            parse_command(cmd_line,&p,j);
+            parse_command(cmd_line,j);
             printf("[main] Passed parse_command\n");
             printf("[main] p->argv[0]: %s\n",j->first_process->argv[0]);
 

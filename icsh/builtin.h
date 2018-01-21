@@ -69,11 +69,11 @@ void print_process(process *p) {
 
 int bif_jobs(char **args, job *j) {
 
-//    if(!j){
-//        printf("No job to be printed\n");
-//        return 0;
-//    }
-//
+    if(!j){
+        /*no running jobs*/
+        return 0;
+    }
+
     if (!j->pgid) {
         fprintf(stderr, "parsing failed");
     }
