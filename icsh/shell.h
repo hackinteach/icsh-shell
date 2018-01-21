@@ -95,17 +95,16 @@ int parse_command(char *line, process *p, job *j) {
     /* Initialize */
     commandLinePtr = &line;
     argc = 0;
-    p->argv[argc] = (char *) malloc(MAX_ARG_LEN);
+    p->argv[argc] = (char *) malloc(sizeof(char)*MAX_ARG_LEN);
 
     /* Fill argv[] */
     while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
         p->argv[++argc] = (char *) malloc(MAX_ARG_LEN);
     }
-    printf("argv[0]: %s\n",p->argv[0]);
-    printf("j->p->argv[0]: %s\n",j->first_process->argv[0]);
-    /* Set job command */
-//    j->command = (char*)malloc(sizeof(p->argv[0]));
-//    strcpy(j->command,p->argv[0]);
+
+    printf("[parse_command] p->argv[0]: %s\n",p->argv[0]);
+    printf("[parse_command] j->p->argv[0]: %s\n",j->first_process->argv[0]);
+
     return 1;
 }
 

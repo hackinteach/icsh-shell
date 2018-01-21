@@ -10,6 +10,11 @@
 #include <ctype.h>
 #include "shell.h"
 
+typedef struct command_t {
+    char* name;
+    int argc;
+    char *argv[MAX_ARGS];
+} command;
 
 /* bif -- built-in function */
 
@@ -56,7 +61,7 @@ int bif_exit(char **args, job *j) {
 
 void print_process(process *p) {
     for (int i = 0; p->argv[i]; ++i) {
-        printf("  %s", i, p->argv[i]);
+        printf("  %s", p->argv[i]);
     }
     printf("\n");
 }
@@ -109,11 +114,11 @@ void split(char *cmd, char **args) {
     cmd = skipwhite(cmd);
     char *next = strchr(cmd, ' ');
     int i = 0;
-
+    args[i] = (char*)malloc(sizeof(char)*MAX_ARG_LEN);
     while (next != NULL) {
         next[0] = '\0';
         args[i] = cmd;
-        ++i;
+        args[++i] = (char*)malloc(sizeof(char)*MAX_ARG_LEN);
         cmd = skipwhite(next + 1);
         next = strchr(cmd, ' ');
     }
@@ -128,22 +133,48 @@ void split(char *cmd, char **args) {
     args[i] = NULL;
 }
 
-int builtin_exec(char **args, job *j){
+void parse_builtin(char *line, command *cmd){
+    int argc;
+    char **commandLinePtr;
 
-    printf("args: %d\n",(args)[0]==NULL);
+    /* Initialize */
+    commandLinePtr = &line;
+    argc = 0;
+    cmd->argv[argc] = (char*) malloc(MAX_ARG_LEN);
 
-    if(args[0] == NULL){
+    /* Fill argv[] */
+    while((cmd->argv[argc] = strsep(commandLinePtr,WHITESPACE) ) != NULL ){
+        cmd->argv[++argc] = (char*)malloc(MAX_ARG_LEN);
+    }
+
+    /* Set cmd name and argc */
+    cmd->argc = argc-1;
+    cmd->name = (char*)malloc(sizeof(cmd->argv[0]));
+    strcpy(cmd->name,cmd->argv[0]);
+
+}
+
+int builtin_exec(char *line, job *j){
+
+    command cmd;
+
+    parse_builtin(line,&cmd);
+    cmd.argv[cmd.argc] = NULL;
+
+    printf("TEST COMMAND: %s \n",cmd.argv[0]);
+
+    if(cmd.argv[0] == NULL){
         printf("NULLED\n");
         return -1;
     }
 
-    printf("Passed NULL check\n");
-    printf("num builtin = %d\n",5);
+    printf("[builtin.h] Passed NULL check\n");
+    printf("[builtin.h] num builtin = %d\n",5);
 
     for(int i=0;i<num_builtin();i++){
-        printf("comparing %s : %s\n i=%d\n",args[0],builtin_str[i],i);
-        if(strcmp(args[0], builtin_str[i]) == 0){
-            return (*builtin_func[i])(args,j);
+        printf("[builtin.h] comparing %s : %s\n i=%d\n",cmd.argv[0],builtin_str[i],i);
+        if(strcmp(cmd.argv[0], builtin_str[i]) == 0){
+            return (*builtin_func[i])(cmd.argv,j);
         }
     }
 

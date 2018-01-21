@@ -24,17 +24,19 @@ int main(){
 
         fgets(cmd_line,MAX_ARG_LEN,stdin);
         /*Debugging*/
-        printf("Passed read cmd_line\n");
-        printf("%s\n",cmd_line);
-        strtok(cmd_line,"\n");
+        printf("[main] Passed read cmd_line\n");
 
-        parse_command(cmd_line,&p,j);
-        printf("Passed parse_command\n");
-        printf("p->argv[0]: %s\n",j->first_process->argv[0]);
-        int checkBuiltIn = builtin_exec(&cmd_line,j);
-        printf("cb : %d\n",checkBuiltIn);
+        strtok(cmd_line,"\n");
+        printf("%s\n",cmd_line);
+        int checkBuiltIn = builtin_exec(cmd_line,j);
+
         if(checkBuiltIn != 0){
             printf("file exec\n");
+
+            parse_command(cmd_line,&p,j);
+            printf("[main] Passed parse_command\n");
+            printf("[main] p->argv[0]: %s\n",j->first_process->argv[0]);
+
             launch_job(&j,foreground);
             do_job_notification();
         }
