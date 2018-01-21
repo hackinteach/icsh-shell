@@ -105,19 +105,19 @@ int parse_command(char *line, job *j) {
     argc = 0;
     p->argv = (char**)malloc(sizeof(char*)*MAX_ARGS);
 
-    p->argv[argc] = (char*)malloc(MAX_ARG_LEN);
+    p->argv[argc] = (char*)malloc(MAX_ARG_LEN*sizeof(char));
 
     /* Fill argv[] */
     printf("Filling argv\n");
-    while ((p->argv[argc++] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
-        p->argv[argc] = (char *) malloc(MAX_ARG_LEN);
+    while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
+        p->argv[++argc] = (char *) malloc(MAX_ARG_LEN*sizeof(char));
+//        printf("argv[%d]: %s\n",argc-1,p->argv[argc-1]);
     }
 
     p->argc = argc;
     printf("[parse_command] p->argv[0]: %s\n", p->argv[0]);
-    printf("[parse_command] j->p->argv[1]: %s\n", j->first_process->argv[1]);
-    free(p->argv[1]);
-
+    printf("[parse_command] p->argv[1]: %s\n", j->first_process->argv[1]);
+    printf("argc = %d\n",p->argc);
     return 0;
 }
 
@@ -392,12 +392,11 @@ void update_status(void) {
 
 void free_process(process *p) {
     if (!p->argv) return;
-    for (int i = 0; p->argv[i] && i < p->argc; i++) {
-        printf("%d\n",i);
-        free(p->argv[i]);
-    }
-
-    printf("freeing argv\n");
+//    for (int i = 0; p->argv[i] && i < p->argc; i++) {
+//        printf("%d\n",i);
+//        free((p->argv[i]));
+//        (p->argv[i]) = NULL;
+//    }
     free(p->argv);
     printf("freed argv\n");
 }
@@ -408,11 +407,12 @@ void free_job(job *j) {
     while (p) {
         process *tmp = p->next;
         free_process(p);
-        printf("done free process\n");
         p = tmp;
     }
-//    free(j->infile);
-//    free(j->outfile);
+    printf("done free process\n");
+    free(j->infile);
+    free(j->outfile);
+    printf("done free job\n");
 }
 
 job *find_job(pid_t pgid) {
@@ -441,7 +441,8 @@ void do_job_notification(void) {
     /* Update status information for child processes.  */
     update_status();
     jlast = NULL;
-    for (j = first_job; j; j = jnext) {
+    for (j = first_job; j ; j = jnext) {
+        printf("NOTIFYING...\n");
         jnext = j->next;
         /* If all processes have completed, tell the user the job has
            completed and delete it from the list of active jobs.  */
