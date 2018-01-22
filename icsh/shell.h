@@ -98,8 +98,6 @@ int parse_command(char *line, job *j) {
 
     j->first_process = p;
 
-    printf("Set first_process done\n");
-
     /* Initialize */
     commandLinePtr = &line;
     argc = 0;
@@ -108,16 +106,11 @@ int parse_command(char *line, job *j) {
     p->argv[argc] = (char*)malloc(MAX_ARG_LEN*sizeof(char));
 
     /* Fill argv[] */
-    printf("Filling argv\n");
     while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
         p->argv[++argc] = (char *) malloc(MAX_ARG_LEN*sizeof(char));
-//        printf("argv[%d]: %s\n",argc-1,p->argv[argc-1]);
     }
 
     p->argc = argc;
-    printf("[parse_command] p->argv[0]: %s\n", p->argv[0]);
-    printf("[parse_command] p->argv[1]: %s\n", j->first_process->argv[1]);
-    printf("argc = %d\n",p->argc);
     return 0;
 }
 
@@ -281,7 +274,12 @@ void format_job_info(job *j, const char *status) {
 
 int job_is_stopped(job *j);
 
-        void wait_for_job(job *j) {
+int mark_process_status(pid_t pid, int status) ;
+
+/* Return true if all processes in the job have completed.  */
+int job_is_completed(job *j) ;
+
+void wait_for_job(job *j) {
     int status;
     pid_t pid;
 
@@ -409,10 +407,10 @@ void free_job(job *j) {
         free_process(p);
         p = tmp;
     }
-    printf("done free process\n");
+//    printf("done free process\n");
     free(j->infile);
     free(j->outfile);
-    printf("done free job\n");
+//    printf("done free job\n");
 }
 
 job *find_job(pid_t pgid) {
@@ -600,6 +598,7 @@ int bif_jobs(process *p, int infile, int outfile, int errfile) {
             }
         }
     }
+    return 0;
 }
 
 int bif_echo(process *p, int infile, int outfile, int errfile) {
@@ -653,6 +652,7 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
         continue_job(jlast, 1);
     else
         dprintf(errfile, "fg: current: no such job\n");
+    return 0;
 }
 
 int bif_bg(process *p, int infile, int outfile, int errfile) {
@@ -696,7 +696,10 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
     if(jlast)
         continue_job(jlast, 0);
     else
+    {
         dprintf(errfile, "bg: current: no such job\n");
+    }
+    return 0;
 }
 
 char *skipwhite(char *s) {

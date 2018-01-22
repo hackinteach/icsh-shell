@@ -25,28 +25,27 @@ int main(){
 
         fgets(cmd_line,MAX_ARG_LEN,stdin);
         strtok(cmd_line,"\n");
-        printf("%s\n",cmd_line);
 
         /*parse_command*/
         // @TODO Parse command
         parse_command(cmd_line,j);
-        printf("%ld\n",j->first_process);
+//        printf("%ld\n",j->first_process);
         /*start the job*/
         if(first_job){
-            printf("First job\n");
+//            printf("First job\n");
             job *t;
             for(t = first_job; t->next;t=t->next){
                 t->next = j;
             }
         } else{
-            printf("else\n");
+//            printf("else\n");
             first_job = j;
         }
-        printf("Launching job: %d\n",j->id);
+//        printf("Launching job: %d\n",j->id);
         launch_job(j,foreground,&id);
-        printf("job launched\n");
-        do_job_notification();
-        printf("notif done\n");
+//        printf("job launched\n");
+//        do_job_notification();
+//        printf("notif done\n");
     }
 }
 
