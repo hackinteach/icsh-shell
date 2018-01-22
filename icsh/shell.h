@@ -5,21 +5,18 @@
 #ifndef _SHELLH_
 #define _SHELLH_
 
-#include <ntsid.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <termios.h>
 #include <unistd.h>
-#include <string.h>
 #include <signal.h>
-#include <errno.h>
+#include <sys/termios.h>
 #include <stdlib.h>
+#include <string.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <ctype.h>
 
 #define MAX_LINE_LEN    80
 #define MAX_ARGS    64
-#define MAX_ARG_LEN     16
+#define MAX_ARG_LEN     1024
 #define WHITESPACE " .,\t\n"
 
 
@@ -606,7 +603,12 @@ int bif_echo(process *p, int infile, int outfile, int errfile) {
         printf("Usage: echo <string>\n");
         return 0;
     }
-    printf("%s\n", p->argv[1]);
+    int i;
+    for (i = 0; p->argv[i]; ++i)
+    {
+        printf("%s",p->argv[i]);
+    }
+    printf("\n");
     return 0;
 }
 
