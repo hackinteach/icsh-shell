@@ -7,7 +7,6 @@
 
 static char *cmd_line;
 job *first_job = NULL;
-//static char cmd_line[MAX_ARG_LEN];
 
 int main() {
     /* Shell initialization */
@@ -42,7 +41,6 @@ int main() {
                 first_job = j;
             launch_job(j, j->foreground, &id);
             do_job_notification();
-            //print_job(first_job);
         }
         else if (j->valid < 0)
         {

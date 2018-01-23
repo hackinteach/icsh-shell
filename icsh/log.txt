@@ -1,93 +1,102 @@
-In file included from icsh.c:6:0:
-shell.h: In function ‘init_shell’:
-shell.h:66:13: warning: implicit declaration of function ‘kill’ [-Wimplicit-function-declaration]
-             kill(-shell_pgid, SIGTTIN);
-             ^
-shell.h: In function ‘parse_command’:
-shell.h:108:29: warning: implicit declaration of function ‘strsep’ [-Wimplicit-function-declaration]
-     while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
-                             ^
-shell.h:108:27: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
-     while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
-                           ^
-shell.h: In function ‘wait_for_job’:
-shell.h:287:19: warning: implicit declaration of function ‘waitpid’ [-Wimplicit-function-declaration]
-             pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-                   ^
-shell.h:287:27: error: ‘WAIT_ANY’ undeclared (first use in this function)
-             pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-                           ^
-shell.h:287:27: note: each undeclared identifier is reported only once for each function it appears in
-shell.h:287:46: error: ‘WUNTRACED’ undeclared (first use in this function)
-             pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-                                              ^
-shell.h: In function ‘mark_process_status’:
-shell.h:307:25: warning: implicit declaration of function ‘WIFSTOPPED’ [-Wimplicit-function-declaration]
-                     if (WIFSTOPPED (status)) {
-                         ^
-shell.h:311:29: warning: implicit declaration of function ‘WIFSIGNALED’ [-Wimplicit-function-declaration]
-                         if (WIFSIGNALED (status)) {
-                             ^
-shell.h:313:48: warning: implicit declaration of function ‘WTERMSIG’ [-Wimplicit-function-declaration]
-                                     (int) pid, WTERMSIG (p->status));
-                                                ^
-shell.h: In function ‘update_status’:
-shell.h:386:23: error: ‘WAIT_ANY’ undeclared (first use in this function)
-         pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-                       ^
-shell.h:386:42: error: ‘WUNTRACED’ undeclared (first use in this function)
-         pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-                                          ^
-shell.h:386:54: error: ‘WNOHANG’ undeclared (first use in this function)
-         pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-                                                      ^
-shell.h: In function ‘bif_jobs’:
-shell.h:567:25: warning: implicit declaration of function ‘dprintf’ [-Wimplicit-function-declaration]
-                         dprintf(outfile, "[%d] %ld Stopped\n", j->id, (long)j->pgid);
-                         ^
-shell.h: In function ‘init_shell’:
-shell.h:66:13: warning: implicit declaration of function ‘kill’ [-Wimplicit-function-declaration]
-             kill(-shell_pgid, SIGTTIN);
-             ^
-shell.h: In function ‘parse_command’:
-shell.h:108:29: warning: implicit declaration of function ‘strsep’ [-Wimplicit-function-declaration]
-     while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
-                             ^
-shell.h:108:27: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
-     while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
-                           ^
-shell.h: In function ‘wait_for_job’:
-shell.h:287:19: warning: implicit declaration of function ‘waitpid’ [-Wimplicit-function-declaration]
-             pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-                   ^
-shell.h:287:27: error: ‘WAIT_ANY’ undeclared (first use in this function)
-             pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-                           ^
-shell.h:287:27: note: each undeclared identifier is reported only once for each function it appears in
-shell.h:287:46: error: ‘WUNTRACED’ undeclared (first use in this function)
-             pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-                                              ^
-shell.h: In function ‘mark_process_status’:
-shell.h:307:25: warning: implicit declaration of function ‘WIFSTOPPED’ [-Wimplicit-function-declaration]
-                     if (WIFSTOPPED (status)) {
-                         ^
-shell.h:311:29: warning: implicit declaration of function ‘WIFSIGNALED’ [-Wimplicit-function-declaration]
-                         if (WIFSIGNALED (status)) {
-                             ^
-shell.h:313:48: warning: implicit declaration of function ‘WTERMSIG’ [-Wimplicit-function-declaration]
-                                     (int) pid, WTERMSIG (p->status));
-                                                ^
-shell.h: In function ‘update_status’:
-shell.h:386:23: error: ‘WAIT_ANY’ undeclared (first use in this function)
-         pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-                       ^
-shell.h:386:42: error: ‘WUNTRACED’ undeclared (first use in this function)
-         pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-                                          ^
-shell.h:386:54: error: ‘WNOHANG’ undeclared (first use in this function)
-         pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-                                                      ^
-shell.h: In function ‘bif_jobs’:
-shell.h:567:25: warning: implicit declaration of function ‘dprintf’ [-Wimplicit-function-declaration]
-                         dprintf(outfile, "[%d] %ld Stopped\n", j->id, (long)j->pgid);
-                         ^
+duplicate symbol _prompt in:
+    icsh.o
+    shell.o
+duplicate symbol _bif_exit in:
+    icsh.o
+    shell.o
+duplicate symbol _mark_process_status in:
+    icsh.o
+    shell.o
+duplicate symbol _update_status in:
+    icsh.o
+    shell.o
+duplicate symbol _print_process in:
+    icsh.o
+    shell.o
+duplicate symbol _launch_process in:
+    icsh.o
+    shell.o
+duplicate symbol _create_process in:
+    icsh.o
+    shell.o
+duplicate symbol _free_process in:
+    icsh.o
+    shell.o
+duplicate symbol _bif_jobs in:
+    icsh.o
+    shell.o
+duplicate symbol _builtin_str in:
+    icsh.o
+    shell.o
+duplicate symbol _bif_echo in:
+    icsh.o
+    shell.o
+duplicate symbol _format_job_info in:
+    icsh.o
+    shell.o
+duplicate symbol _do_job_notification in:
+    icsh.o
+    shell.o
+duplicate symbol _num_builtin in:
+    icsh.o
+    shell.o
+duplicate symbol _launch_builtin in:
+    icsh.o
+    shell.o
+duplicate symbol _init_shell in:
+    icsh.o
+    shell.o
+duplicate symbol _mark_job_as_running in:
+    icsh.o
+    shell.o
+duplicate symbol _bif_fg in:
+    icsh.o
+    shell.o
+duplicate symbol _bif_bg in:
+    icsh.o
+    shell.o
+duplicate symbol _skipwhite in:
+    icsh.o
+    shell.o
+duplicate symbol _put_job_in_background in:
+    icsh.o
+    shell.o
+duplicate symbol _put_job_in_foreground in:
+    icsh.o
+    shell.o
+duplicate symbol _parse_command in:
+    icsh.o
+    shell.o
+duplicate symbol _find_job_id in:
+    icsh.o
+    shell.o
+duplicate symbol _job_is_completed in:
+    icsh.o
+    shell.o
+duplicate symbol _job_is_stopped in:
+    icsh.o
+    shell.o
+duplicate symbol _builtin_func in:
+    icsh.o
+    shell.o
+duplicate symbol _wait_for_job in:
+    icsh.o
+    shell.o
+duplicate symbol _launch_job in:
+    icsh.o
+    shell.o
+duplicate symbol _continue_job in:
+    icsh.o
+    shell.o
+duplicate symbol _create_job in:
+    icsh.o
+    shell.o
+duplicate symbol _free_job in:
+    icsh.o
+    shell.o
+duplicate symbol _find_job in:
+    icsh.o
+    shell.o
+ld: 33 duplicate symbols for architecture x86_64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make: *** [icsh] Error 1
