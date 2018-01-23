@@ -43,8 +43,8 @@
       <file leaf-file-name="shell.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/shell.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1744">
-              <caret line="633" column="28" lean-forward="false" selection-start-line="633" selection-start-column="28" selection-end-line="633" selection-end-column="28" />
+            <state relative-caret-position="18357">
+              <caret line="633" column="21" lean-forward="true" selection-start-line="633" selection-start-column="21" selection-end-line="633" selection-end-column="21" />
               <folding>
                 <element signature="e#0#2#0" expanded="false" />
                 <element signature="e#74#1293#0" expanded="false" />
@@ -81,7 +81,7 @@
       <file leaf-file-name="shell.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/shell.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
+            <state relative-caret-position="1653">
               <caret line="57" column="5" lean-forward="false" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
               <folding>
                 <element signature="e#88#110#0" expanded="true" />
@@ -280,11 +280,12 @@
       <workItem from="1516643951793" duration="431000" />
       <workItem from="1516688416341" duration="6732000" />
       <workItem from="1516708752351" duration="766000" />
+      <workItem from="1516723339063" duration="2000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="76777000" />
+    <option name="totallyTimeSpent" value="76779000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -501,7 +502,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2013">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -554,7 +554,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-437">
           <caret line="36" column="22" lean-forward="false" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -581,7 +580,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/shell.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
+        <state relative-caret-position="1653">
           <caret line="57" column="5" lean-forward="false" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
           <folding>
             <element signature="e#88#110#0" expanded="true" />
@@ -591,8 +590,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/shell.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1744">
-          <caret line="633" column="28" lean-forward="false" selection-start-line="633" selection-start-column="28" selection-end-line="633" selection-end-column="28" />
+        <state relative-caret-position="18357">
+          <caret line="633" column="21" lean-forward="true" selection-start-line="633" selection-start-column="21" selection-end-line="633" selection-end-column="21" />
           <folding>
             <element signature="e#0#2#0" expanded="false" />
             <element signature="e#74#1293#0" expanded="false" />

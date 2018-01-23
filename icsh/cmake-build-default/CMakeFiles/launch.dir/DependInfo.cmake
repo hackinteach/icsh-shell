@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/examples/launch.c" "/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/CMakeFiles/launch.dir/examples/launch.c.o"
+  "/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/examples/launch.c" "/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/cmake-build-default/CMakeFiles/launch.dir/examples/launch.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 

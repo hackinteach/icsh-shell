@@ -1,4 +1,4 @@
-# Install script for directory: /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh
+# Install script for directory: /Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,5 +35,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/cmake-build-default/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/cmake-build-default/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
