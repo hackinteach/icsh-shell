@@ -14,15 +14,27 @@ int main() {
     int id = 1;
     while (1) {
         init_shell();
-        prompt();
+
+        int validCmd = 0;
+        do {
+            prompt();
+
+
+            cmd_line = (char *) malloc(sizeof(char) * MAX_ARG_LEN);
+
+            fgets(cmd_line, MAX_ARG_LEN, stdin);
+            strtok(cmd_line, "\n");
+
+            if(strcmp(cmd_line,"") == 0){
+                printf("invalid input\n");
+                free(cmd_line);
+                validCmd = -1;
+            }
+
+        }while(validCmd == -1);
+
 
         job *j = create_job();
-
-        cmd_line = (char *) malloc(sizeof(char) * MAX_ARG_LEN);
-
-        fgets(cmd_line, MAX_ARG_LEN, stdin);
-        strtok(cmd_line, "\n");
-
         int foreground = (strchr(cmd_line, '&') == NULL);
         j->foreground = foreground;
 
@@ -41,12 +53,14 @@ int main() {
                 first_job = j;
             launch_job(j, j->foreground, &id);
             do_job_notification();
+//            print_job(first_job);
         }
         else if (j->valid < 0)
         {
             do_job_notification();
         }
         else (free_job(j));
+
     }
 }
 

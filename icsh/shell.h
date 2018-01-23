@@ -82,6 +82,8 @@ void do_job_notification(void);
 void mark_job_as_running(job *j);
 void continue_job(job *j, int foreground);
 void prompt();
+void print_job (job* j);
+void print_process(process *p);
 static void pSigHandler(int signo);
 
 /* Built in  */
