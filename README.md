@@ -3,6 +3,7 @@
 ICSH -- C implementation of a simple shell.
 
 Built-in commands:
+
 - echo <args> -- printing <args> to screen.
 
 - jobs -- listing all jobs in the current shell.
