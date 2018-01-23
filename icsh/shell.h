@@ -46,6 +46,8 @@ typedef struct job {
     struct termios tmodes;      /* saved terminal modes */
     int stdin, stdout, stderr;  /* standard i/o channels */
     int id;
+    int foreground;
+    int valid;
 } job;
 
 /* Shell's attributes */
@@ -159,6 +161,9 @@ void launch_process(process *p, pid_t pgid,
     }
 
     /* Exec the new process.  Make sure we exit.  */
+    if(strcmp(p->argv[0],"") == 0){
+        exit(-1);
+    }
     execvp(p->argv[0], p->argv);
     perror("execvp");
     exit(1);
@@ -249,6 +254,7 @@ void launch_job(job *j, int foreground, int *id) {
 
 void put_job_in_foreground(job *j, int cont) {
     /* Put the job into the foreground.  */
+    j->foreground = 1;
     tcsetpgrp(shell_terminal, j->pgid);
 
     /* Send the job a continue signal, if necessary.  */
@@ -271,6 +277,7 @@ void put_job_in_foreground(job *j, int cont) {
 
 void put_job_in_background(job *j, int cont) {
     /* Send the job a continue signal, if necessary.  */
+    j->foreground = 0;
     if (cont) {
         if (kill(-j->pgid, SIGCONT) < 0) {
             perror("kill (SIGCONT)");
@@ -306,35 +313,39 @@ void wait_for_job(job *j) {
 }
 
 
-int mark_process_status(pid_t pid, int status) {
+int mark_process_status (pid_t pid, int status)
+{
     job *j;
     process *p;
-
-    if (pid > 0) {
+    if (pid > 0)
+    {
         /* Update the record for the process.  */
         for (j = first_job; j; j = j->next)
             for (p = j->first_process; p; p = p->next)
-                if (p->pid == pid) {
+                if (p->pid == pid)
+                {
                     p->status = status;
-                    if (WIFSTOPPED (status)) {
+                    if (WIFSTOPPED (status))
                         p->stopped = 1;
-                    } else {
+                    else
+                    {
                         p->completed = 1;
-                        if (WIFSIGNALED (status)) {
-                            fprintf(stderr, "%d: Terminated by signal %d.\n",
-                                    (int) pid, WTERMSIG (p->status));
-                        }
+                        if (WIFSIGNALED (status))
+                            fprintf (stderr, "%d: Terminated by signal %d.\n",
+                                     (int) pid, WTERMSIG (p->status));
                     }
                     return 0;
                 }
-        fprintf(stderr, "No child process %d.\n", pid);
+        fprintf (stderr, "No child process %d.\n", pid);
         return -1;
-    } else if (pid == 0 || errno == ECHILD) {
+    }
+    else if (pid == 0 || errno == ECHILD)
         /* No processes ready to report.  */
         return -1;
-    } else {
+    else
+    {
         /* Other weird errors.  */
-        perror("waitpid");
+        perror ("waitpid");
         return -1;
     }
 }
@@ -369,10 +380,13 @@ job *create_job(void) {
     j->pgid = 0;
     j->infile = NULL;
     j->outfile = NULL;
+    j->foreground = 1;
     j->stdin = STDIN_FILENO;
     j->stdout = STDOUT_FILENO;
     j->stderr = STDERR_FILENO;
     j->notified = 0;
+    j->valid = 1;
+    j->next = NULL;
     return j;
 }
 
@@ -396,7 +410,6 @@ void update_status(void) {
 
     do {
         pid = waitpid(-1, &status, WUNTRACED | WNOHANG);
-        pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
     } while (!mark_process_status(pid, status));
 }
 
@@ -418,10 +431,8 @@ void free_job(job *j) {
         free_process(p);
         p = tmp;
     }
-//    printf("done free process\n");
     free(j->infile);
     free(j->outfile);
-//    printf("done free job\n");
 }
 
 job *find_job(pid_t pgid) {
@@ -443,34 +454,40 @@ job *find_job_id(int id) {
     return NULL;
 }
 
-void do_job_notification(void) {
+void do_job_notification (void)
+{
     job *j, *jlast, *jnext;
-//    process *p;
 
     /* Update status information for child processes.  */
-    update_status();
+    update_status ();
+
     jlast = NULL;
-    for (j = first_job; j; j = jnext) {
-        printf("NOTIFYING...\n");
-        jnext = j->next;
+    for (j = first_job; j; j = jnext)
+    {
+        jnext = (j)->next;
+
         /* If all processes have completed, tell the user the job has
-           completed and delete it from the list of active jobs.  */
-        if (job_is_completed(j)) {
-            format_job_info(j, "completed");
-            if (jlast) {
-                printf("LAST\n");
+        completed and delete it from the list of active jobs.  */
+        if (job_is_completed (j)) {
+            if (j->foreground)
+                format_job_info (j, "Done");
+            if (jlast)
+            {
+                printf("jlast\n");
                 jlast->next = jnext;
-            } else {
-                printf("SET FIRST\n");
+            }
+            else
+            {
                 first_job = jnext;
             }
-            free_job(j);
+            free_job (j);
         }
 
             /* Notify the user about stopped jobs,
-               marking them so that we won’t do this more than once.  */
-        else if (job_is_stopped(j) && !j->notified) {
-            format_job_info(j, "stopped");
+            marking them so that we won’t do this more than once.  */
+        else if (job_is_stopped (j) && !j->notified)
+        {
+            format_job_info (j, "Stopped");
             j->notified = 1;
             jlast = j;
         }
@@ -490,6 +507,7 @@ void mark_job_as_running(job *j) {
 }
 
 void continue_job(job *j, int foreground) {
+
     mark_job_as_running(j);
     if (foreground) {
         put_job_in_foreground(j, 1);
@@ -503,12 +521,13 @@ void prompt() {
 }
 
 static void pSigHandler(int signo) {
-    switch (signo) {
-        case SIGINT:
-            printf("Ctrl+C caught\n");
-            fflush(stdout);
-            break;
-    }
+//    switch (signo) {
+//        case SIGINT:
+//            fflush(stdout);
+//            break;
+//    }
+    printf("\n");
+    fflush(stdout);
 }
 
 /* BUILT-IN STUFF */
