@@ -9,43 +9,35 @@ static char *cmd_line;
 job *first_job = NULL;
 //static char cmd_line[MAX_ARG_LEN];
 
-int main(){
+int main() {
     /* Shell initialization */
     init_shell();
-    int  id = 1;
-    while(1){
+    int id = 1;
+    while (1) {
         prompt();
 
         job *j = create_job();
 
-        cmd_line = (char*) malloc(sizeof(char)*MAX_ARG_LEN);
+        cmd_line = (char *) malloc(sizeof(char) * MAX_ARG_LEN);
 
-        //@TODO : Add checking for & for background later.
-        int foreground = (strchr(cmd_line,'&')==NULL);
+        fgets(cmd_line, MAX_ARG_LEN, stdin);
+        strtok(cmd_line, "\n");
 
-        fgets(cmd_line,MAX_ARG_LEN,stdin);
-        strtok(cmd_line,"\n");
+        int foreground = (strchr(cmd_line, '&') == NULL);
 
         /*parse_command*/
-        // @TODO Parse command
-        parse_command(cmd_line,j);
-//        printf("%ld\n",j->first_process);
+        parse_command(cmd_line, j);
+
         /*start the job*/
-        if(first_job){
-//            printf("First job\n");
+        if (first_job) {
             job *t;
-            for(t = first_job; t->next;t=t->next){
+            for (t = first_job; t->next; t = t->next) {
                 t->next = j;
             }
-        } else{
-//            printf("else\n");
+        } else {
             first_job = j;
         }
-//        printf("Launching job: %d\n",j->id);
-        launch_job(j,foreground,&id);
-//        printf("job launched\n");
-//        do_job_notification();
-//        printf("notif done\n");
+        launch_job(j, foreground, &id);
     }
 }
 
