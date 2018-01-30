@@ -1,7 +1,0 @@
-/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/cmake-build-default/CMakeFiles/rebuild_cache.dir
-/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/cmake-build-default/CMakeFiles/edit_cache.dir
-/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/cmake-build-default/CMakeFiles/caller.dir
-/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/cmake-build-default/CMakeFiles/fork_example.dir
-/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/cmake-build-default/CMakeFiles/execvp_example.dir
-/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/cmake-build-default/CMakeFiles/launch.dir
-/Users/hackinteachk./Desktop/T2-2018/OS/Homeworks/icsh/icsh/cmake-build-default/CMakeFiles/icsh.dir

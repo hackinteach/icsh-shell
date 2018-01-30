@@ -1,2 +1,4 @@
 icsh/*.o
 icsh/icsh
+icsh/cmake*
+icsh/CMakeLists.txt
