@@ -2,7 +2,8 @@
 
 This repository is part of **Operating System** course's assignment 1 (ICCS 222).
 
-[Assignment 1.pdf](#Assignment 1/ IC Shell.pdf)
+[Assignment 1.pdf](#https://github.com/hackinteach/icsh-shell/blob/master/Assignment%201:%20IC%20Shell.pdf)
+
 Lecturer : Dr.Sunsern Cheamanunkul
 
 
