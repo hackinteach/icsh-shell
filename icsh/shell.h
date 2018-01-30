@@ -54,6 +54,7 @@ struct termios shell_tmodes;
 int shell_terminal;
 int shell_is_interactive;
 job *first_job;
+int lastStatus;
 
 /* Misc function*/
 void init_shell();

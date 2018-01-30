@@ -1,6 +1,6 @@
 CC = gcc
-# CFLAGS = -g -D_POSIX_C_SOURCE -Wall -std=c99
-CFLAGS = -g -Wall -std=c99
+CFLAGS = -g -D_POSIX_C_SOURCE -Wall -std=c99
+# CFLAGS = -g -Wall -std=c99
 TARGET = icsh
 LIBS = -lm
 

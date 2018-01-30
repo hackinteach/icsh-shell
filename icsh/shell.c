@@ -3,6 +3,7 @@
 //
 //#define _POSIX_SOURCE
 
+
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -154,10 +155,12 @@ void launch_job(job *j, int foreground, int *id) {
         } else {
             /* Fork the child processes.  */
             pid = fork();
-            if (pid == 0)
+            if (pid == 0) {
+//                printf("LAUNCH PROCESS [%d]\n",p->pid);
                 /* This is the child process.  */
                 launch_process(p, j->pgid, infile,
                                outfile, j->stderr, foreground);
+            }
             else if (pid < 0) {
                 /* The fork failed.  */
                 perror("fork");
@@ -240,10 +243,10 @@ void format_job_info(job *j, const char *status) {
 void wait_for_job(job *j) {
     int status;
     pid_t pid;
-
-    do
+    do{
         pid = waitpid (-j->pgid, &status, WUNTRACED);
-    while (!mark_process_status (pid, status)
+        lastStatus = status;
+    }while (!mark_process_status (pid, status)
            && !job_is_stopped (j)
            && !job_is_completed (j));
 }
@@ -547,18 +550,18 @@ int bif_jobs(process *p, int infile, int outfile, int errfile) {
                 {
                     if(job_is_stopped(j))
                     {
-                        dprintf(outfile, "[%d] %ld Stopped\n", j->id, (long)j->pgid);
+                        fprintf(fdopen(outfile,"W"), "[%d] %ld Stopped\n", j->id, (long)j->pgid);
                     }
                     else
                     {
-                        dprintf(outfile, "[%d] %ld Running\n", j->id, (long)j->pgid);
+                        fprintf(fdopen(outfile,"W"), "[%d] %ld Running\n", j->id, (long)j->pgid);
                     }
                 }
                 else
-                    dprintf(errfile, "jobs: %s : no such job\n", p->argv[i]);
+                    fprintf(fdopen(outfile,"W"), "jobs: %s : no such job\n", p->argv[i]);
             }
             else
-                dprintf(errfile, "jobs: %s : no such job\n", p->argv[i]);
+                fprintf(fdopen(outfile,"W"), "jobs: %s : no such job\n", p->argv[i]);
         }
         return 0;
     }
@@ -572,11 +575,11 @@ int bif_jobs(process *p, int infile, int outfile, int errfile) {
         {
             if(job_is_stopped(j))
             {
-                dprintf(outfile, "[%d] %ld Stopped\n", j->id, (long)j->pgid);
+                fprintf(fdopen(outfile,"W"), "[%d] %ld Stopped\n", j->id, (long)j->pgid);
             }
             else
             {
-                dprintf(outfile, "[%d] %ld Running\n", j->id, (long)j->pgid);
+                fprintf(fdopen(outfile,"W"), "[%d] %ld Running\n", j->id, (long)j->pgid);
             }
         }
     }
@@ -591,7 +594,7 @@ int bif_echo(process *p, int infile, int outfile, int errfile) {
 
     if (strcmp(p->argv[1], "$?") == 0) {
         // @TODO Fix this
-        printf("status:\n");
+        printf("status: %d\n",lastStatus);
         return 0;
     }
     int i;
@@ -624,10 +627,10 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
                 }
 
                 else
-                    dprintf(errfile, "fg: %s : no such job\n", p->argv[i]);
+                    fprintf(fdopen(errfile,"W"), "fg: %s : no such job\n", p->argv[i]);
             }
             else
-                dprintf(errfile, "fg: %s : no such job\n", p->argv[i]);
+                fprintf(fdopen(errfile,"W"), "fg: %s : no such job\n", p->argv[i]);
         }
         return 0;
     }
@@ -650,7 +653,7 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
     if(jlast)
         continue_job(jlast, 1);
     else
-        dprintf(errfile, "fg: current: no such job\n");
+        fprintf(fdopen(errfile,"W"), "fg: current: no such job\n");
 
     return 0;
 }
@@ -676,10 +679,10 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
                     put_job_in_background(j,1);
                 }
                 else
-                    dprintf(errfile, "bg: %s : no such job\n", p->argv[i]);
+                    fprintf(fdopen(errfile,"W"), "bg: %s : no such job\n", p->argv[i]);
             }
             else
-                dprintf(errfile, "bg: %s : no such job\n", p->argv[i]);
+                fprintf(fdopen(errfile,"W"), "bg: %s : no such job\n", p->argv[i]);
         }
         return 0;
     }
@@ -702,12 +705,13 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
     if(jlast)
         continue_job(jlast, 0);
     else
-        dprintf(errfile, "bg: current: no such job\n");
+        fprintf(fdopen(errfile,"W"), "bg: current: no such job\n");
     return 0;
 }
 
 int launch_built_in(process *p, int infile, int outfile, int errfile) {
     /* Set the std i/o channels of the new process. */
+//    printf("LAUNCH BUILTIN [%d]\n",p->pid);
     for (int i = 0; i < num_builtin(); i++) {
         if (strcmp(builtin_str[i], p->argv[0]) == 0) {
             return (*builtin_func[i])(p, infile, outfile, errfile);
