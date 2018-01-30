@@ -525,7 +525,7 @@ int num_builtin() {
  * */
 int bif_exit(process *p, int infile, int outfile, int errfile) {
     update_status();
-    printf("---- terminated ----");
+    printf("====== terminated ======\n");
     exit(0);
 }
 
