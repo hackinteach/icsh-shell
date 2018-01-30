@@ -5,18 +5,7 @@
 #ifndef _SHELLH_
 #define _SHELLH_
 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <signal.h>
 #include <sys/termios.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <ctype.h>
-
 
 #define MAX_LINE_LEN    80
 #define MAX_ARGS    64
@@ -33,6 +22,7 @@ typedef struct process {
     char completed;             /* true if process has completed */
     char stopped;               /* true if process has stopped */
     int status;                 /* reported status value */
+    int foreground;
 } process;
 
 /* A job is a pipeline of processes.  */

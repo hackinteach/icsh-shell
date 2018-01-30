@@ -3,6 +3,8 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <memory.h>
 #include "shell.h"
 
 static char *cmd_line;
@@ -14,27 +16,25 @@ int main() {
     int id = 1;
     while (1) {
         init_shell();
-
+        job *j = create_job();
         int validCmd = 0;
         do {
+
             prompt();
-
-
             cmd_line = (char *) malloc(sizeof(char) * MAX_ARG_LEN);
 
             fgets(cmd_line, MAX_ARG_LEN, stdin);
-            strtok(cmd_line, "\n");
-
-            if(strcmp(cmd_line,"") == 0){
-                printf("invalid input\n");
-                free(cmd_line);
+            if(cmd_line[0] == '\n'){
                 validCmd = -1;
+            }else{
+                validCmd = 0;
             }
-
+            do_job_notification();
+            strtok(cmd_line, "\n");
         }while(validCmd == -1);
 
 
-        job *j = create_job();
+
         int foreground = (strchr(cmd_line, '&') == NULL);
         j->foreground = foreground;
 
@@ -53,7 +53,6 @@ int main() {
                 first_job = j;
             launch_job(j, j->foreground, &id);
             do_job_notification();
-//            print_job(first_job);
         }
         else if (j->valid < 0)
         {

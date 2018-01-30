@@ -1,8 +1,18 @@
 //
 // Created by Hackinteach K. on 23/1/2018 AD.
 //
+//#define _POSIX_SOURCE
 
-
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/termios.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <errno.h>
 #include "shell.h"
 
 /* List of all functions to be used later */
@@ -18,15 +28,13 @@ void init_shell() {
         /* Ignore interactive and job-control signals.  */
         struct sigaction psa;
         psa.sa_handler = pSigHandler;
-        sigaction(SIGINT, &psa, NULL);
-        sigaction(SIGSTOP, &psa, NULL);
 
-//        signal(SIGINT, SIG_IGN);
-        signal(SIGQUIT, SIG_IGN);
-        signal(SIGTSTP, SIG_IGN);
-        signal(SIGTTIN, SIG_IGN);
-        signal(SIGTTOU, SIG_IGN);
-//        signal(SIGCHLD, SIG_IGN);
+        sigaction(SIGINT, &psa, NULL);
+        signal(SIGINT,SIG_IGN);
+        signal (SIGQUIT, SIG_IGN);
+        signal (SIGTSTP, SIG_IGN);
+        signal (SIGTTIN, SIG_IGN);
+        signal (SIGTTOU, SIG_IGN);
 
         /* Put ourselves in our own process group.  */
         shell_pgid = getpid();
@@ -105,16 +113,9 @@ void launch_process(process *p, pid_t pgid,
     }
 
     /* Exec the new process.  Make sure we exit.  */
-//    if (strcmp(p->argv[0], "") == 0) {
-//        exit(-1);
-//    }
-    execvp(p->argv[0], p->argv);
-    if (errno == 2) {
-        printf("icsh: command not found : %s\n", p->argv[0]);
-    } else {
-        perror("execvp");
-    }
 
+    execvp(p->argv[0], p->argv);
+    perror("execvp");
     exit(1);
 }
 
@@ -199,8 +200,11 @@ void put_job_in_foreground(job *j, int cont) {
     /* Send the job a continue signal, if necessary.  */
     if (cont) {
         tcsetattr(shell_terminal, TCSADRAIN, &j->tmodes);
-        if (kill(-j->pgid, SIGCONT) < 0)
+        if (kill(- j->pgid, SIGCONT) < 0)
             perror("kill (SIGCONT)");
+        else{
+            format_job_info(j,"foreground");
+        }
     }
 
     /* Wait for it to report.  */
@@ -220,7 +224,9 @@ void put_job_in_background(job *j, int cont) {
     if (cont) {
         if (kill(-j->pgid, SIGCONT) < 0) {
             perror("kill (SIGCONT)");
-        }
+        }else{
+            format_job_info(j,"background");
+        };
     }
 }
 
@@ -232,16 +238,6 @@ void wait_for_job(job *j) {
     int status;
     pid_t pid;
 
-//    if (!job_is_stopped(j)) {
-//        do {
-//            pid = waitpid(-1, &status, WUNTRACED);
-////            pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-//        } while (!mark_process_status(pid, status)
-//                 && !job_is_completed(j));
-//    } else {
-//        pid = waitpid(-1, &status, WUNTRACED);
-////        pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-//    }
     do
         pid = waitpid (-j->pgid, &status, WUNTRACED);
     while (!mark_process_status (pid, status)
@@ -261,7 +257,7 @@ int mark_process_status(pid_t pid, int status) {
                     p->status = status;
                     if (WIFSTOPPED (status)) {
                         p->stopped = 1;
-                        kill(pid, status);
+//                        kill(pid, status);
                     } else {
                         p->completed = 1;
                         if (WIFSIGNALED (status)) {
@@ -344,7 +340,7 @@ process *create_process(void) {
     p->argc = 0;
     p->completed = 0;
     p->stopped = 0;
-
+    p->foreground = 1;
     return p;
 }
 
@@ -407,7 +403,8 @@ void do_job_notification(void) {
 
     jlast = NULL;
     for (j = first_job; j; j = jnext) {
-        jnext = (j)->next;
+
+        jnext = j->next;
 
         /* If all processes have completed, tell the user the job has
         completed and delete it from the list of active jobs.  */
@@ -441,14 +438,16 @@ void mark_job_as_running(job *j) {
     process *p;
 
     for (p = j->first_process; p; p = p->next)
+    {
         p->stopped = 0;
+    }
     j->notified = 0;
 }
 
 void continue_job(job *j, int foreground) {
 
     mark_job_as_running(j);
-    if (foreground) {
+    if (foreground == 1) {
         put_job_in_foreground(j, 1);
     } else {
         put_job_in_background(j, 1);
@@ -460,11 +459,12 @@ void prompt() {
 }
 
 static void pSigHandler(int signo) {
-//    switch (signo) {
-//        case SIGINT:
-//            fflush(stdout);
-//            break;
-//    }
+    switch (signo) {
+        case SIGINT:
+            fputs("\033c", stdout);
+            fflush(stdout);
+            break;
+    }
     printf("\n");
     fflush(stdout);
 }
@@ -502,7 +502,6 @@ int num_builtin() {
  * IMPLEMENTATIONS
  * */
 int bif_exit(process *p, int infile, int outfile, int errfile) {
-    printf("good bye...\n");
     update_status();
     exit(0);
 }
@@ -529,7 +528,7 @@ void print_job (job* j)
         printf("outfile: %s\n", j->outfile);
     for (p = j->first_process; p; p = p->next)
     {
-        printf("pro%d\n", i);
+        printf("p[%d]", i);
         print_process(p);
         i = i + 1;
     }
@@ -619,7 +618,12 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
             if (j)
             {
                 if(!job_is_completed(j) && job_is_stopped(j))
+                {
                     continue_job(j, 1);
+                }
+                else if(j->foreground == 0){
+                    put_job_in_foreground(j,1);
+                }
                 else
                     dprintf(errfile, "fg: %s : no such job\n", p->argv[i]);
             }
@@ -653,19 +657,28 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
 }
 
 int bif_bg(process *p, int infile, int outfile, int errfile) {
-    if (p->argv[1]) {
+    if (p->argv[1])
+    {
         int i;
         int id;
-        job *j;
-        for (i = 1; p->argv[i]; ++i) {
+        job* j;
+        for (i = 1; p->argv[i]; ++i)
+        {
             id = atoi(p->argv[i]);
             j = find_job_id(id);
-            if (j) {
-                if (!job_is_completed(j) && job_is_stopped(j))
+            if (j)
+            {
+                if((!job_is_completed(j) && job_is_stopped(j)) || j->foreground == 1)
+                {
                     continue_job(j, 0);
+                }
+                else if(j->foreground == 1){
+                    put_job_in_foreground(j,0);
+                }
                 else
                     dprintf(errfile, "bg: %s : no such job\n", p->argv[i]);
-            } else
+            }
+            else
                 dprintf(errfile, "bg: %s : no such job\n", p->argv[i]);
         }
         return 0;
@@ -673,27 +686,24 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
     job *j;
     job *jlast = NULL;
     /* Update status information for child processes.  */
-    update_status();
+    update_status ();
 
-    for (j = first_job; j; j = j->next) {
-        if (!job_is_completed(j) && j->id) {
-            if (job_is_stopped(j)) {
+    for (j = first_job; j; j = j->next)
+    {
+        if(!job_is_completed(j) && j->id)
+        {
+            if(job_is_stopped(j))
+            {
                 jlast = j;
             }
         }
     }
 
-    if (jlast)
+    if(jlast)
         continue_job(jlast, 0);
-    else {
+    else
         dprintf(errfile, "bg: current: no such job\n");
-    }
     return 0;
-}
-
-char *skipwhite(char *s) {
-    while (isspace(*s)) ++s;
-    return s;
 }
 
 int launch_builtin(process *p, int infile, int outfile, int errfile) {
