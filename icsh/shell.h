@@ -5,7 +5,16 @@
 #ifndef _SHELLH_
 #define _SHELLH_
 
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <signal.h>
 #include <sys/termios.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <errno.h>
 
 #define MAX_LINE_LEN    80
 #define MAX_ARGS    64
@@ -22,7 +31,6 @@ typedef struct process {
     char completed;             /* true if process has completed */
     char stopped;               /* true if process has stopped */
     int status;                 /* reported status value */
-    int foreground;
 } process;
 
 /* A job is a pipeline of processes.  */
@@ -74,7 +82,7 @@ void continue_job(job *j, int foreground);
 void prompt();
 void print_job (job* j);
 void print_process(process *p);
-static void pSigHandler(int signo);
+//static void pSigHandler(int signo);
 
 /* Built in  */
 /* FUNCTION DECLARATION */
@@ -88,5 +96,5 @@ int bif_fg(process *p, int infile, int outfile, int errfile);
 
 int bif_bg(process *p, int infile, int outfile, int errfile);
 
-int launch_builtin(process *p, int infile, int outfile, int errfile);
+int launch_built_in(process *p, int infile, int outfile, int errfile);
 #endif

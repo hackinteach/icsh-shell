@@ -22,14 +22,12 @@ void init_shell() {
     shell_terminal = STDIN_FILENO;
     shell_is_interactive = isatty(shell_terminal);
     if (shell_is_interactive) {
+
         /* Loop until we are in the foreground.  */
         while (tcgetpgrp(shell_terminal) != (shell_pgid = getpgrp()))
             kill(-shell_pgid, SIGTTIN);
-        /* Ignore interactive and job-control signals.  */
-        struct sigaction psa;
-        psa.sa_handler = pSigHandler;
 
-        sigaction(SIGINT, &psa, NULL);
+        /* Ignore interactive and job-control signals.  */
         signal(SIGINT,SIG_IGN);
         signal (SIGQUIT, SIG_IGN);
         signal (SIGTSTP, SIG_IGN);
@@ -53,24 +51,26 @@ void init_shell() {
 
 int parse_command(char *line, job *j) {
     int argc;
-    char **commandLinePtr;
     process *p = create_process();
 
     j->first_process = p;
 
     /* Initialize */
-    commandLinePtr = &line;
     argc = 0;
     p->argv = (char **) malloc(sizeof(char *) * MAX_ARGS);
-
     p->argv[argc] = (char *) malloc(MAX_ARG_LEN * sizeof(char));
 
-    /* Fill argv[] */
-    while ((p->argv[argc] = strsep(commandLinePtr, WHITESPACE)) != NULL) {
-        p->argv[++argc] = (char *) malloc(MAX_ARG_LEN * sizeof(char));
-    }
 
+    /* Fill argv[] */
+    char* str = strtok(line,WHITESPACE);
+    while (str != NULL) {
+        strncpy(p->argv[argc++],str,strlen(str));
+        p->argv[argc] = (char *) malloc(MAX_ARG_LEN * sizeof(char));
+        str = strtok(NULL,WHITESPACE);
+    }
+    p->argv[argc] = NULL;
     p->argc = argc;
+
     return 0;
 }
 
@@ -96,6 +96,7 @@ void launch_process(process *p, pid_t pgid,
         signal(SIGTTIN, SIG_DFL);
         signal(SIGTTOU, SIG_DFL);
         signal(SIGCHLD, SIG_DFL);
+
     }
 
     /* Set the standard input/output channels of the new process.  */
@@ -114,7 +115,7 @@ void launch_process(process *p, pid_t pgid,
 
     /* Exec the new process.  Make sure we exit.  */
 
-    execvp(p->argv[0], p->argv);
+    execvp(p->argv[0],p->argv);
     perror("execvp");
     exit(1);
 }
@@ -148,7 +149,7 @@ void launch_job(job *j, int foreground, int *id) {
             outfile = mypipe[1];
         } else
             outfile = j->stdout;
-        if (launch_builtin(p, infile, outfile, j->stderr) == 0) {
+        if (launch_built_in(p, infile, outfile, j->stderr) == 0) {
             p->completed = 1;
         } else {
             /* Fork the child processes.  */
@@ -194,6 +195,7 @@ void launch_job(job *j, int foreground, int *id) {
 
 void put_job_in_foreground(job *j, int cont) {
     /* Put the job into the foreground.  */
+//    printf("FROM FOREGROUND\n");
     j->foreground = 1;
     tcsetpgrp(shell_terminal, j->pgid);
 
@@ -220,6 +222,7 @@ void put_job_in_foreground(job *j, int cont) {
 
 void put_job_in_background(job *j, int cont) {
     /* Send the job a continue signal, if necessary.  */
+//    printf("FROM BACKGROUND\n");
     j->foreground = 0;
     if (cont) {
         if (kill(-j->pgid, SIGCONT) < 0) {
@@ -340,7 +343,6 @@ process *create_process(void) {
     p->argc = 0;
     p->completed = 0;
     p->stopped = 0;
-    p->foreground = 1;
     return p;
 }
 
@@ -354,11 +356,6 @@ void update_status(void) {
 
 void free_process(process *p) {
     if (!p->argv) return;
-//    for (int i = 0; p->argv[i] && i < p->argc; i++) {
-//        printf("%d\n",i);
-//        free((p->argv[i]));
-//        (p->argv[i]) = NULL;
-//    }
     free(p->argv);
 }
 
@@ -458,16 +455,16 @@ void prompt() {
     printf("icsh> ");
 }
 
-static void pSigHandler(int signo) {
-    switch (signo) {
-        case SIGINT:
-            fputs("\033c", stdout);
-            fflush(stdout);
-            break;
-    }
-    printf("\n");
-    fflush(stdout);
-}
+//static void pSigHandler(int signo) {
+//    switch (signo) {
+//        case SIGINT:
+//            fputs("\033c", stdout);
+//            fflush(stdout);
+//            break;
+//    }
+//    printf("\n");
+//    fflush(stdout);
+//}
 
 /* BUILT-IN STUFF */
 
@@ -594,7 +591,7 @@ int bif_echo(process *p, int infile, int outfile, int errfile) {
 
     if (strcmp(p->argv[1], "$?") == 0) {
         // @TODO Fix this
-        printf("%d\n", 5);
+        printf("status:\n");
         return 0;
     }
     int i;
@@ -623,7 +620,9 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
                 }
                 else if(j->foreground == 0){
                     put_job_in_foreground(j,1);
+//                    put_job_in_background(j,1);
                 }
+
                 else
                     dprintf(errfile, "fg: %s : no such job\n", p->argv[i]);
             }
@@ -673,7 +672,8 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
                     continue_job(j, 0);
                 }
                 else if(j->foreground == 1){
-                    put_job_in_foreground(j,0);
+//                    put_job_in_foreground(j,0);
+                    put_job_in_background(j,1);
                 }
                 else
                     dprintf(errfile, "bg: %s : no such job\n", p->argv[i]);
@@ -706,7 +706,7 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
     return 0;
 }
 
-int launch_builtin(process *p, int infile, int outfile, int errfile) {
+int launch_built_in(process *p, int infile, int outfile, int errfile) {
     /* Set the std i/o channels of the new process. */
     for (int i = 0; i < num_builtin(); i++) {
         if (strcmp(builtin_str[i], p->argv[0]) == 0) {
