@@ -9,7 +9,7 @@ Lecturer : Dr.Sunsern Cheamanunkul
 
 ### Files
 ----
-```Download here : [Link](https://github.com/hackinteach/icsh-shell/archive/master.zip)```
+**Download here : [Link](https://github.com/hackinteach/icsh-shell/archive/master.zip)**
 
 - icsh.c   : this is where I combined all the code together.
 - shell.h : structs and functions declaration.
