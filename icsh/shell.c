@@ -64,11 +64,31 @@ int parse_command(char *line, job *j) {
 
     /* Fill argv[] */
     char* str = strtok(line,WHITESPACE);
+    int hasInFile = 0;
+    int hasOutFile = 0;
     while (str != NULL) {
-        strncpy(p->argv[argc++],str,strlen(str));
-        p->argv[argc] = (char *) malloc(MAX_ARG_LEN * sizeof(char));
+
+        if(strcmp(str,"<")==0){
+//            printf("has IN file\n");
+            hasInFile = 1;
+        }else if(strcmp(str,">")==0){
+//            printf("has OUT file\n");
+            hasOutFile = 1;
+        }else if(hasInFile==1){
+            j->infile = (char*)malloc(sizeof(char));
+            strcpy(j->infile,str);
+            hasInFile = 0;
+        }else if(hasOutFile==1){
+            j->outfile = (char*)malloc(sizeof(char));
+            strcpy(j->outfile,str);
+            hasOutFile = 0;
+        }else{
+            strncpy(p->argv[argc++],str,strlen(str));
+            p->argv[argc] = (char *) malloc(MAX_ARG_LEN * sizeof(char));
+        }
         str = strtok(NULL,WHITESPACE);
     }
+
     p->argv[argc] = NULL;
     p->argc = argc;
 
@@ -128,6 +148,7 @@ void launch_job(job *j, int foreground, int *id) {
     if (j->infile) {
         j->stdin = open(j->infile, O_RDONLY);
         if (j->stdin < 0) {
+            printf("Can't open infile\n");
             perror(j->infile);
             exit(1);
         }
@@ -135,6 +156,7 @@ void launch_job(job *j, int foreground, int *id) {
     if (j->outfile) {
         j->stdout = open(j->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
         if (j->stdout < 0) {
+            printf("Can't open outfile\n");
             perror(j->outfile);
             exit(1);
         }
@@ -322,7 +344,7 @@ job *create_job(void) {
     }
     j->first_process = NULL;
     j->pgid = 0;
-    j->infile = NULL;
+    j->infile =  NULL;
     j->outfile = NULL;
     j->foreground = 1;
     j->stdin = STDIN_FILENO;
@@ -372,8 +394,8 @@ void free_job(job *j) {
         free_process(p);
         p = tmp;
     }
-    free(j->infile);
-    free(j->outfile);
+//    free(j->infile);
+//    free(j->outfile);
 }
 
 job *find_job(pid_t pgid) {
@@ -503,6 +525,7 @@ int num_builtin() {
  * */
 int bif_exit(process *p, int infile, int outfile, int errfile) {
     update_status();
+    printf("---- terminated ----");
     exit(0);
 }
 

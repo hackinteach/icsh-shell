@@ -19,7 +19,7 @@
 #define MAX_LINE_LEN    80
 #define MAX_ARGS    64
 #define MAX_ARG_LEN     1024
-#define WHITESPACE " .,\t\n"
+#define WHITESPACE " \t\n"
 
 
 /* A process is a single process.  */
