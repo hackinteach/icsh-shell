@@ -640,7 +640,7 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
         job* j;
         for (i = 1; p->argv[i]; ++i)
         {
-            id = atoi(p->argv[i]);
+            id = atoi(&(p->argv[i][1]));
             j = find_job_id(id);
             if (j)
             {
@@ -693,7 +693,7 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
         job* j;
         for (i = 1; p->argv[i]; ++i)
         {
-            id = atoi(p->argv[i]);
+            id = atoi(&(p->argv[i][1]));
             j = find_job_id(id);
             if (j)
             {
