@@ -573,18 +573,22 @@ int bif_jobs(process *p, int infile, int outfile, int errfile) {
                 {
                     if(job_is_stopped(j))
                     {
-                        fprintf(fdopen(outfile,"W"), "[%d] %ld Stopped\n", j->id, (long)j->pgid);
+//                        printf("1\n");
+                        fprintf(stdout, "[%d] %ld Stopped\n", j->id, (long)j->pgid);
                     }
                     else
                     {
-                        fprintf(fdopen(outfile,"W"), "[%d] %ld Running\n", j->id, (long)j->pgid);
+//                        printf("2\n");
+                        fprintf(stdout, "[%d] %ld Running\n", j->id, (long)j->pgid);
                     }
                 }
                 else
-                    fprintf(fdopen(outfile,"W"), "jobs: %s : no such job\n", p->argv[i]);
+//                    printf("3\n");
+                    fprintf(stderr, "jobs: %s : no such job\n", p->argv[i]);
             }
             else
-                fprintf(fdopen(outfile,"W"), "jobs: %s : no such job\n", p->argv[i]);
+//                printf("4\n");
+                fprintf(stderr, "jobs: %s : no such job\n", p->argv[i]);
         }
         return 0;
     }
@@ -598,11 +602,11 @@ int bif_jobs(process *p, int infile, int outfile, int errfile) {
         {
             if(job_is_stopped(j))
             {
-                fprintf(fdopen(outfile,"W"), "[%d] %ld Stopped\n", j->id, (long)j->pgid);
+                fprintf(stdout, "[%d] %ld Stopped\n", j->id, (long)j->pgid);
             }
             else
             {
-                fprintf(fdopen(outfile,"W"), "[%d] %ld Running\n", j->id, (long)j->pgid);
+                fprintf(stdout, "[%d] %ld Running\n", j->id, (long)j->pgid);
             }
         }
     }
@@ -650,10 +654,10 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
                 }
 
                 else
-                    fprintf(fdopen(errfile,"W"), "fg: %s : no such job\n", p->argv[i]);
+                    fprintf(stderr, "fg: %s : no such job\n", p->argv[i]);
             }
             else
-                fprintf(fdopen(errfile,"W"), "fg: %s : no such job\n", p->argv[i]);
+                fprintf(stderr, "fg: %s : no such job\n", p->argv[i]);
         }
         return 0;
     }
@@ -676,7 +680,7 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
     if(jlast)
         continue_job(jlast, 1);
     else
-        fprintf(fdopen(errfile,"W"), "fg: current: no such job\n");
+        fprintf(stderr, "fg: current: no such job\n");
 
     return 0;
 }
@@ -702,10 +706,10 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
                     put_job_in_background(j,1);
                 }
                 else
-                    fprintf(fdopen(errfile,"W"), "bg: %s : no such job\n", p->argv[i]);
+                    fprintf(stderr, "bg: %s : no such job\n", p->argv[i]);
             }
             else
-                fprintf(fdopen(errfile,"W"), "bg: %s : no such job\n", p->argv[i]);
+                fprintf(stderr, "bg: %s : no such job\n", p->argv[i]);
         }
         return 0;
     }
@@ -728,7 +732,7 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
     if(jlast)
         continue_job(jlast, 0);
     else
-        fprintf(fdopen(errfile,"W"), "bg: current: no such job\n");
+        fprintf(stderr, "bg: current: no such job\n");
     return 0;
 }
 
