@@ -480,17 +480,6 @@ void prompt() {
     printf("icsh> ");
 }
 
-//static void pSigHandler(int signo) {
-//    switch (signo) {
-//        case SIGINT:
-//            fputs("\033c", stdout);
-//            fflush(stdout);
-//            break;
-//    }
-//    printf("\n");
-//    fflush(stdout);
-//}
-
 /* BUILT-IN STUFF */
 
 /* bif -- built-in function */
@@ -573,21 +562,17 @@ int bif_jobs(process *p, int infile, int outfile, int errfile) {
                 {
                     if(job_is_stopped(j))
                     {
-//                        printf("1\n");
                         fprintf(stdout, "[%d] %ld Stopped\n", j->id, (long)j->pgid);
                     }
                     else
                     {
-//                        printf("2\n");
                         fprintf(stdout, "[%d] %ld Running\n", j->id, (long)j->pgid);
                     }
                 }
                 else
-//                    printf("3\n");
                     fprintf(stderr, "jobs: %s : no such job\n", p->argv[i]);
             }
             else
-//                printf("4\n");
                 fprintf(stderr, "jobs: %s : no such job\n", p->argv[i]);
         }
         return 0;
@@ -697,7 +682,7 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
             j = find_job_id(id);
             if (j)
             {
-                if((!job_is_completed(j) && job_is_stopped(j)) || j->foreground == 1)
+                if((!job_is_completed(j) && job_is_stopped(j)))
                 {
                     continue_job(j, 0);
                 }
