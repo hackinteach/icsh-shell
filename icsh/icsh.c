@@ -24,16 +24,14 @@ int main() {
             cmd_line = (char *) malloc(sizeof(char) * MAX_ARG_LEN);
 
             fgets(cmd_line, MAX_ARG_LEN, stdin);
-            if(cmd_line[0] == '\n'){
+            if (cmd_line[0] == '\n') {
                 validCmd = -1;
-            }else{
+            } else {
                 validCmd = 0;
             }
             do_job_notification();
             strtok(cmd_line, "\n");
-        }while(validCmd == -1);
-
-
+        } while (validCmd == -1);
 
         int foreground = (strchr(cmd_line, '&') == NULL);
         j->foreground = foreground;
@@ -41,24 +39,18 @@ int main() {
         /*parse_command*/
         parse_command(cmd_line, j);
 
-        if(j->valid > 0)
-        {
-            if(first_job)
-            {
+        if (j->valid > 0) {
+            if (first_job) {
                 job *t;
-                for(t = first_job; t->next; t = t->next);
+                for (t = first_job; t->next; t = t->next);
                 t->next = j;
-            }
-            else
+            } else
                 first_job = j;
             launch_job(j, j->foreground, &id);
             do_job_notification();
-        }
-        else if (j->valid < 0)
-        {
+        } else if (j->valid < 0) {
             do_job_notification();
-        }
-        else (free_job(j));
+        } else (free_job(j));
 
     }
 }

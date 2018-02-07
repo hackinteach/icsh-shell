@@ -29,11 +29,11 @@ void init_shell() {
             kill(-shell_pgid, SIGTTIN);
 
         /* Ignore interactive and job-control signals.  */
-        signal(SIGINT,SIG_IGN);
-        signal (SIGQUIT, SIG_IGN);
-        signal (SIGTSTP, SIG_IGN);
-        signal (SIGTTIN, SIG_IGN);
-        signal (SIGTTOU, SIG_IGN);
+        signal(SIGINT, SIG_IGN);
+        signal(SIGQUIT, SIG_IGN);
+        signal(SIGTSTP, SIG_IGN);
+        signal(SIGTTIN, SIG_IGN);
+        signal(SIGTTOU, SIG_IGN);
 
         /* Put ourselves in our own process group.  */
         shell_pgid = getpid();
@@ -63,30 +63,30 @@ int parse_command(char *line, job *j) {
 
 
     /* Fill argv[] */
-    char* str = strtok(line,WHITESPACE);
+    char *str = strtok(line, WHITESPACE);
     int hasInFile = 0;
     int hasOutFile = 0;
     while (str != NULL) {
 
-        if(strcmp(str,"<")==0){
+        if (strcmp(str, "<") == 0) {
 //            printf("has IN file\n");
             hasInFile = 1;
-        }else if(strcmp(str,">")==0){
+        } else if (strcmp(str, ">") == 0) {
 //            printf("has OUT file\n");
             hasOutFile = 1;
-        }else if(hasInFile==1){
-            j->infile = (char*)malloc(sizeof(char));
-            strcpy(j->infile,str);
+        } else if (hasInFile == 1) {
+            j->infile = (char *) malloc(sizeof(char));
+            strcpy(j->infile, str);
             hasInFile = 0;
-        }else if(hasOutFile==1){
-            j->outfile = (char*)malloc(sizeof(char));
-            strcpy(j->outfile,str);
+        } else if (hasOutFile == 1) {
+            j->outfile = (char *) malloc(sizeof(char));
+            strcpy(j->outfile, str);
             hasOutFile = 0;
-        }else{
-            strncpy(p->argv[argc++],str,strlen(str));
+        } else {
+            strncpy(p->argv[argc++], str, strlen(str));
             p->argv[argc] = (char *) malloc(MAX_ARG_LEN * sizeof(char));
         }
-        str = strtok(NULL,WHITESPACE);
+        str = strtok(NULL, WHITESPACE);
     }
 
     p->argv[argc] = NULL;
@@ -136,7 +136,7 @@ void launch_process(process *p, pid_t pgid,
 
     /* Exec the new process.  Make sure we exit.  */
 
-    execvp(p->argv[0],p->argv);
+    execvp(p->argv[0], p->argv);
     perror("execvp");
     exit(1);
 }
@@ -182,8 +182,7 @@ void launch_job(job *j, int foreground, int *id) {
                 /* This is the child process.  */
                 launch_process(p, j->pgid, infile,
                                outfile, j->stderr, foreground);
-            }
-            else if (pid < 0) {
+            } else if (pid < 0) {
                 /* The fork failed.  */
                 perror("fork");
                 exit(1);
@@ -227,10 +226,10 @@ void put_job_in_foreground(job *j, int cont) {
     /* Send the job a continue signal, if necessary.  */
     if (cont) {
         tcsetattr(shell_terminal, TCSADRAIN, &j->tmodes);
-        if (kill(- j->pgid, SIGCONT) < 0)
+        if (kill(-j->pgid, SIGCONT) < 0)
             perror("kill (SIGCONT)");
-        else{
-            format_job_info(j,"foreground");
+        else {
+            format_job_info(j, "foreground");
         }
     }
 
@@ -252,8 +251,8 @@ void put_job_in_background(job *j, int cont) {
     if (cont) {
         if (kill(-j->pgid, SIGCONT) < 0) {
             perror("kill (SIGCONT)");
-        }else{
-            format_job_info(j,"background");
+        } else {
+            format_job_info(j, "background");
         };
     }
 }
@@ -265,12 +264,12 @@ void format_job_info(job *j, const char *status) {
 void wait_for_job(job *j) {
     int status;
     pid_t pid;
-    do{
-        pid = waitpid (-j->pgid, &status, WUNTRACED);
+    do {
+        pid = waitpid(-j->pgid, &status, WUNTRACED);
         lastStatus = status;
-    }while (!mark_process_status (pid, status)
-           && !job_is_stopped (j)
-           && !job_is_completed (j));
+    } while (!mark_process_status(pid, status)
+             && !job_is_stopped(j)
+             && !job_is_completed(j));
 }
 
 
@@ -283,14 +282,14 @@ int mark_process_status(pid_t pid, int status) {
             for (p = j->first_process; p; p = p->next) {
                 if (p->pid == pid) {
                     p->status = status;
-                    if (WIFSTOPPED (status)) {
+                    if (WIFSTOPPED(status)) {
                         p->stopped = 1;
 //                        kill(pid, status);
                     } else {
                         p->completed = 1;
-                        if (WIFSIGNALED (status)) {
+                        if (WIFSIGNALED(status)) {
                             fprintf(stderr, "%d: Terminated by signal %d.\n",
-                                    (int) pid, WTERMSIG (p->status));
+                                    (int) pid, WTERMSIG(p->status));
                         }
                     }
                     return 0;
@@ -312,10 +311,8 @@ int mark_process_status(pid_t pid, int status) {
 /* Return true if all processes in the job have completed.  */
 int job_is_completed(job *j) {
     process *p;
-    for (p = j->first_process; p; p = p->next)
-    {
-        if (!p->completed)
-        {
+    for (p = j->first_process; p; p = p->next) {
+        if (!p->completed) {
             return 0;
         }
     }
@@ -326,10 +323,8 @@ int job_is_completed(job *j) {
 int job_is_stopped(job *j) {
     process *p;
 
-    for (p = j->first_process; p; p = p->next)
-    {
-        if (!p->completed && !p->stopped)
-        {
+    for (p = j->first_process; p; p = p->next) {
+        if (!p->completed && !p->stopped) {
             return 0;
         }
     }
@@ -344,7 +339,7 @@ job *create_job(void) {
     }
     j->first_process = NULL;
     j->pgid = 0;
-    j->infile =  NULL;
+    j->infile = NULL;
     j->outfile = NULL;
     j->foreground = 1;
     j->stdin = STDIN_FILENO;
@@ -459,8 +454,7 @@ void do_job_notification(void) {
 void mark_job_as_running(job *j) {
     process *p;
 
-    for (p = j->first_process; p; p = p->next)
-    {
+    for (p = j->first_process; p; p = p->next) {
         p->stopped = 0;
     }
     j->notified = 0;
@@ -525,21 +519,18 @@ void print_process(process *p) {
     printf("\n");
 }
 
-void print_job (job* j)
-{
-    if(!j->id)
-    {
+void print_job(job *j) {
+    if (!j->id) {
         fprintf(stderr, "parsing failed\n");
         return;
     }
     process *p;
     int i = 0;
-    if(j->infile)
+    if (j->infile)
         printf("infile: %s\n", j->infile);
-    if(j->outfile)
+    if (j->outfile)
         printf("outfile: %s\n", j->outfile);
-    for (p = j->first_process; p; p = p->next)
-    {
+    for (p = j->first_process; p; p = p->next) {
         printf("p[%d]", i);
         print_process(p);
         i = i + 1;
@@ -547,51 +538,37 @@ void print_job (job* j)
 }
 
 int bif_jobs(process *p, int infile, int outfile, int errfile) {
-    if (p->argv[1])
-    {
+    if (p->argv[1]) {
         int i;
         int id;
-        job* j;
-        for (i = 1; p->argv[i]; ++i)
-        {
+        job *j;
+        for (i = 1; p->argv[i]; ++i) {
             id = atoi(p->argv[i]);
             j = find_job_id(id);
-            if (j)
-            {
-                if(!job_is_completed(j))
-                {
-                    if(job_is_stopped(j))
-                    {
-                        fprintf(stdout, "[%d] %ld Stopped\n", j->id, (long)j->pgid);
+            if (j) {
+                if (!job_is_completed(j)) {
+                    if (job_is_stopped(j)) {
+                        fprintf(stdout, "[%d] %ld Stopped\n", j->id, (long) j->pgid);
+                    } else {
+                        fprintf(stdout, "[%d] %ld Running\n", j->id, (long) j->pgid);
                     }
-                    else
-                    {
-                        fprintf(stdout, "[%d] %ld Running\n", j->id, (long)j->pgid);
-                    }
-                }
-                else
+                } else
                     fprintf(stderr, "jobs: %s : no such job\n", p->argv[i]);
-            }
-            else
+            } else
                 fprintf(stderr, "jobs: %s : no such job\n", p->argv[i]);
         }
         return 0;
     }
     job *j;
     /* Update status information for child processes.  */
-    update_status ();
+    update_status();
 
-    for (j = first_job; j; j = j->next)
-    {
-        if(!job_is_completed(j) && j->id)
-        {
-            if(job_is_stopped(j))
-            {
-                fprintf(stdout, "[%d] %ld Stopped\n", j->id, (long)j->pgid);
-            }
-            else
-            {
-                fprintf(stdout, "[%d] %ld Running\n", j->id, (long)j->pgid);
+    for (j = first_job; j; j = j->next) {
+        if (!job_is_completed(j) && j->id) {
+            if (job_is_stopped(j)) {
+                fprintf(stdout, "[%d] %ld Stopped\n", j->id, (long) j->pgid);
+            } else {
+                fprintf(stdout, "[%d] %ld Running\n", j->id, (long) j->pgid);
             }
         }
     }
@@ -605,8 +582,7 @@ int bif_echo(process *p, int infile, int outfile, int errfile) {
     }
 
     if (strcmp(p->argv[1], "$?") == 0) {
-        // @TODO Fix this
-        printf("status: %d\n",lastStatus);
+        printf("status: %d\n", lastStatus);
         return 0;
     }
     int i;
@@ -618,30 +594,21 @@ int bif_echo(process *p, int infile, int outfile, int errfile) {
 }
 
 int bif_fg(process *p, int infile, int outfile, int errfile) {
-    if (p->argv[1])
-    {
+    if (p->argv[1]) {
         int i;
         int id;
-        job* j;
-        for (i = 1; p->argv[i]; ++i)
-        {
+        job *j;
+        for (i = 1; p->argv[i]; ++i) {
             id = atoi(&(p->argv[i][1]));
             j = find_job_id(id);
-            if (j)
-            {
-                if(!job_is_completed(j) && job_is_stopped(j))
-                {
+            if (j) {
+                if (!job_is_completed(j) && job_is_stopped(j)) {
                     continue_job(j, 1);
-                }
-                else if(j->foreground == 0){
-                    put_job_in_foreground(j,1);
-//                    put_job_in_background(j,1);
-                }
-
-                else
+                } else if (j->foreground == 0) {
+                    put_job_in_foreground(j, 1);
+                } else
                     fprintf(stderr, "fg: %s : no such job\n", p->argv[i]);
-            }
-            else
+            } else
                 fprintf(stderr, "fg: %s : no such job\n", p->argv[i]);
         }
         return 0;
@@ -649,20 +616,17 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
     job *j;
     job *jlast = NULL;
     /* Update status information for child processes.  */
-    update_status ();
+    update_status();
 
-    for (j = first_job; j; j = j->next)
-    {
-        if(!job_is_completed(j) && j->id)
-        {
-            if(job_is_stopped(j))
-            {
+    for (j = first_job; j; j = j->next) {
+        if (!job_is_completed(j) && j->id) {
+            if (job_is_stopped(j)) {
                 jlast = j;
             }
         }
     }
 
-    if(jlast)
+    if (jlast)
         continue_job(jlast, 1);
     else
         fprintf(stderr, "fg: current: no such job\n");
@@ -671,29 +635,21 @@ int bif_fg(process *p, int infile, int outfile, int errfile) {
 }
 
 int bif_bg(process *p, int infile, int outfile, int errfile) {
-    if (p->argv[1])
-    {
+    if (p->argv[1]) {
         int i;
         int id;
-        job* j;
-        for (i = 1; p->argv[i]; ++i)
-        {
+        job *j;
+        for (i = 1; p->argv[i]; ++i) {
             id = atoi(&(p->argv[i][1]));
             j = find_job_id(id);
-            if (j)
-            {
-                if((!job_is_completed(j) && job_is_stopped(j)))
-                {
+            if (j) {
+                if ((!job_is_completed(j) && job_is_stopped(j))) {
                     continue_job(j, 0);
-                }
-                else if(j->foreground == 1){
-//                    put_job_in_foreground(j,0);
-                    put_job_in_background(j,1);
-                }
-                else
+                } else if (j->foreground == 1) {
+                    put_job_in_background(j, 1);
+                } else
                     fprintf(stderr, "bg: %s : no such job\n", p->argv[i]);
-            }
-            else
+            } else
                 fprintf(stderr, "bg: %s : no such job\n", p->argv[i]);
         }
         return 0;
@@ -701,20 +657,17 @@ int bif_bg(process *p, int infile, int outfile, int errfile) {
     job *j;
     job *jlast = NULL;
     /* Update status information for child processes.  */
-    update_status ();
+    update_status();
 
-    for (j = first_job; j; j = j->next)
-    {
-        if(!job_is_completed(j) && j->id)
-        {
-            if(job_is_stopped(j))
-            {
+    for (j = first_job; j; j = j->next) {
+        if (!job_is_completed(j) && j->id) {
+            if (job_is_stopped(j)) {
                 jlast = j;
             }
         }
     }
 
-    if(jlast)
+    if (jlast)
         continue_job(jlast, 0);
     else
         fprintf(stderr, "bg: current: no such job\n");
